@@ -91,7 +91,7 @@ body {
 .page {
   max-width: 640px;
   margin: 0 auto;
-  padding: 0 24px 64px;
+  /*padding: 0 24px 64px;*/
 }
 
 .card {

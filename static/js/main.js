@@ -3,7 +3,6 @@ $(function () {
 
   const $form = $("#disclosure-form");
   const $card = $form.closest(".card");
-  const $courseInput = $("#course_id");
   const $emailInput = $("#student_email");
   const $noAiCheckbox = $("#no_ai_used");
   const $logField = $("#log-field");
@@ -18,8 +17,10 @@ $(function () {
   const SUBMIT_URL = "/api/prompts"; // Adjust to match your Flask route.
 
   /* ------------------------------------------------------------------
-     Pre-fill course/assignment from the URL, e.g.
+     Course/assignment now come exclusively from the URL, e.g.
      /?course_id=COSI-121A&assignment_id=hw3
+     There's no manual course field anymore, so course_id is required
+     to be present in the query string for a submission to be valid.
      ------------------------------------------------------------------ */
   function hydrateFromQueryParams() {
     const params = new URLSearchParams(window.location.search);
@@ -27,9 +28,9 @@ $(function () {
     const assignmentId = params.get("assignment_id");
 
     if (courseId) {
-      $courseInput.val(courseId).prop("readonly", true);
       $contextCourse.text("Course: " + courseId).prop("hidden", false);
       $contextBar.prop("hidden", false);
+      $form.data("courseId", courseId);
     }
 
     if (assignmentId) {
@@ -73,14 +74,8 @@ $(function () {
   function validate() {
     let valid = true;
 
-    clearFieldError("course_id");
     clearFieldError("student_email");
     clearFieldError("ai_log");
-
-    if (!$courseInput.val().trim()) {
-      setFieldError("course_id", "Enter your course ID.");
-      valid = false;
-    }
 
     const email = $emailInput.val().trim();
     if (!email) {
@@ -88,6 +83,14 @@ $(function () {
       valid = false;
     } else if (!isValidEmail(email)) {
       setFieldError("student_email", "Enter a valid email address.");
+      valid = false;
+    }
+
+    if (!$form.data("courseId")) {
+      setStatus(
+        "This link is missing a course ID. Please use the link your instructor provided.",
+        "error"
+      );
       valid = false;
     }
 
@@ -133,7 +136,7 @@ $(function () {
     }
 
     const payload = {
-      course_id: $courseInput.val().trim(),
+      course_id: $form.data("courseId") || null,
       student_email: $emailInput.val().trim(),
       used_ai: !$noAiCheckbox.is(":checked"),
       ai_log: $noAiCheckbox.is(":checked") ? null : $logTextarea.val().trim(),
