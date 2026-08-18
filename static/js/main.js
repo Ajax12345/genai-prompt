@@ -170,4 +170,6 @@ $(function () {
 
   hydrateFromQueryParams();
   syncLogFieldState();
+
+  $("#current-year").text(new Date().getFullYear());
 });
