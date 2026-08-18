@@ -1,4 +1,6 @@
-import flask
+import flask, json
+import prompt_save
+
 
 app = flask.Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -7,6 +9,14 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 @app.route('/', methods = ['GET'])
 def home() -> str:
     return flask.render_template('index.html')
+
+@app.route('/api/prompts', methods = ['POST'])
+def api_prompts() -> dict:
+    resp = prompt_save.PromptSave.save_prompt_submission(
+        flask.request.get_json()
+    )
+
+    return flask.jsonify(resp)
 
 '''
 @app.after_request

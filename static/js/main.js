@@ -114,11 +114,12 @@ $(function () {
   }
 
   function showConfirmation() {
+    $("#submit-btn").css('display', 'none');
     const $confirmation = $(
       '<div class="confirmation">' +
         '<div class="confirmation__icon">&#10003;</div>' +
-        '<h2 class="confirmation__title">Disclosure submitted</h2>' +
-        '<p class="confirmation__text">Thanks — your AI usage report has been recorded.</p>' +
+        '<h2 class="confirmation__title">Report submitted</h2>' +
+        '<p class="confirmation__text">Your AI usage submission has been recorded.</p>' +
         "</div>"
     );
     $card.append($confirmation).addClass("is-submitted");
@@ -162,7 +163,7 @@ $(function () {
           "error"
         );
         $submitBtn.prop("disabled", false);
-        $submitBtn.find(".submit-btn__label").text("Submit disclosure");
+        $submitBtn.find(".submit-btn__label").text("Submit");
       });
   }
 
