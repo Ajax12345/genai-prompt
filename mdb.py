@@ -4,7 +4,7 @@ import asyncio, sqlite3
 import json
 
 class DB:
-    DB_URL = 'postgresql://james:YdtTojHX6g2xjSyFnrNrGw@brandeis-research-16044.j77.aws-us-east-1.cockroachlabs.cloud:26257/defaultdb?sslmode=verify-full'
+    DB_URL = 'postgresql://jamesp:NOiMxLDRD3ra3QGrIxopS0XdJANBRxdZ@dpg-da2945rjan9c73a3icgg-a.virginia-postgres.render.com/genai_cf6h'
     def __init__(self, as_dict:bool = False) -> None:
         self.as_dict = as_dict
 

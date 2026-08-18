@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Usage Disclosure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="ribbon">
+    <div class="ribbon__inner">
+      <p class="ribbon__eyebrow">Computer Science Department</p>
+      <h1 class="ribbon__title">AI Usage Disclosure</h1>
+      <p class="ribbon__subtitle">Report your AI assistance for this assignment submission.</p>
+    </div>
+  </header>
+
+  <main class="page">
+    <form id="disclosure-form" class="card" novalidate>
+
+      <div class="context-bar" id="context-bar" hidden>
+        <span class="context-bar__item" id="context-course"></span>
+        <span class="context-bar__item" id="context-assignment"></span>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="course_id">Course ID</label>
+        <input
+          class="field__input"
+          type="text"
+          id="course_id"
+          name="course_id"
+          placeholder="e.g. COSI-121A"
+          autocomplete="off"
+          required
+        />
+        <p class="field__error" id="course_id-error"></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="student_email">Student email</label>
+        <input
+          class="field__input"
+          type="email"
+          id="student_email"
+          name="student_email"
+          placeholder="you@brandeis.edu"
+          autocomplete="email"
+          required
+        />
+        <p class="field__error" id="student_email-error"></p>
+      </div>
+
+      <div class="divider"></div>
+
+      <fieldset class="field">
+        <legend class="field__label">AI assistance</legend>
+
+        <label class="checkbox">
+          <input type="checkbox" id="no_ai_used" name="no_ai_used" />
+          <span class="checkbox__box" aria-hidden="true"></span>
+          <span class="checkbox__text">I did not use AI assistance for this assignment</span>
+        </label>
+
+        <div class="log-field" id="log-field">
+          <label class="field__label field__label--sub" for="ai_log">Paste your full conversation log</label>
+          <p class="field__hint">
+            Include your prompts and the model's responses, in the order they occurred.
+          </p>
+          <textarea
+            class="field__textarea"
+            id="ai_log"
+            name="ai_log"
+            rows="10"
+            placeholder="Paste prompts and responses here..."
+          ></textarea>
+          <p class="field__error" id="ai_log-error"></p>
+        </div>
+      </fieldset>
+
+      <div class="submit-row">
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <button class="submit-btn" type="submit" id="submit-btn">
+          <span class="submit-btn__label">Submit disclosure</span>
+        </button>
+      </div>
+    </form>
+
+    <p class="footnote">
+      Every student must submit this form, regardless of whether AI was used.
+      Contact your instructor if you have questions about this requirement.
+    </p>
+  </main>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

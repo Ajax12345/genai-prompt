@@ -6,7 +6,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 @app.route('/', methods = ['GET'])
 def home() -> str:
-    return "<h1>Hello world! it has been too long!</h1>"
+    return flask.render_template('index.html')
 
 '''
 @app.after_request
