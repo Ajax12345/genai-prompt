@@ -1,5 +1,5 @@
 import flask, json
-import prompt_save
+import app_handlers
 import functools
 import random, string
 from typing import (
@@ -36,7 +36,7 @@ def prompt_submit() -> str:
 
 @app.route('/api/prompts', methods = ['POST'])
 def api_prompts() -> dict:
-    resp = prompt_save.PromptSave.save_prompt_submission(
+    resp = app_handlers.PromptSave.save_prompt_submission(
         flask.request.get_json()
     )
 
@@ -51,7 +51,7 @@ def instructor_login() -> str:
 
 @app.route('/api/instructor/login', methods = ['POST'])
 def api_instructor_login() -> tuple:
-    resp = prompt_save.Users.validate_login(
+    resp = app_handlers.Users.validate_login(
         flask.request.get_json()
     )
 
