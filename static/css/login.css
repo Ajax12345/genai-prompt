@@ -1,0 +1,480 @@
+/* ==========================================================================
+   Tokens
+   ========================================================================== */
+:root {
+  --navy-900: #00204a;
+  --navy-800: #003478;
+  --navy-700: #0a4696;
+  --cyan-500: #00b3e9;
+  --cyan-100: #e3f7fd;
+
+  --ink-900: #1a2332;
+  --ink-600: #4c5a6e;
+  --ink-400: #8593a4;
+
+  --surface: #ffffff;
+  --page-bg: #f4f7fa;
+  --border: #dde4ec;
+
+  --success: #1e824c;
+  --success-bg: #eaf6ef;
+  --error: #c0392b;
+  --error-bg: #fbebe9;
+
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --radius: 10px;
+  --shadow-card: 0 1px 2px rgba(0, 32, 74, 0.06), 0 16px 40px -20px rgba(0, 32, 74, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--page-bg);
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   Ribbon header
+   ========================================================================== */
+.ribbon {
+  background: linear-gradient(155deg, var(--navy-800) 0%, var(--navy-900) 100%);
+  border-bottom: 3px solid var(--cyan-500);
+  padding: 48px 24px 72px;
+}
+
+.ribbon__inner {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.ribbon__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cyan-500);
+  margin: 0 0 12px;
+}
+
+.ribbon__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.ribbon__subtitle {
+  font-size: 15px;
+  color: #c3d3e6;
+  margin: 0;
+  max-width: 46ch;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+
+.page--narrow {
+  max-width: 440px;
+}
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 36px 36px 32px;
+  margin-top: -48px;
+  position: relative;
+}
+
+.footnote {
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-400);
+  margin-top: 20px;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Context bar (populated when course/assignment come from the URL)
+   ========================================================================== */
+.context-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.context-bar__item {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  background: var(--cyan-100);
+  color: var(--navy-800);
+  border: 1px solid rgba(0, 179, 233, 0.35);
+  border-radius: 100px;
+  padding: 5px 12px;
+}
+
+/* ==========================================================================
+   Fields
+   ========================================================================== */
+fieldset.field {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.field {
+  margin-bottom: 22px;
+}
+
+.field__label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-600);
+  margin-bottom: 8px;
+}
+
+.field__label--sub {
+  margin-top: 18px;
+}
+
+.field__hint {
+  font-size: 13px;
+  color: var(--ink-400);
+  margin: -4px 0 10px;
+}
+
+.field__input,
+.field__textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--ink-900);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 14px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field__textarea {
+  resize: vertical;
+  min-height: 160px;
+  line-height: 1.5;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.field__input:hover,
+.field__textarea:hover {
+  border-color: var(--ink-400);
+}
+
+.field__input:focus-visible,
+.field__textarea:focus-visible {
+  outline: none;
+  border-color: var(--navy-700);
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.14);
+}
+
+.field__input[aria-invalid="true"],
+.field__textarea[aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.field__error {
+  font-size: 13px;
+  color: var(--error);
+  margin: 6px 0 0;
+  min-height: 0;
+  display: none;
+}
+
+.field__error.is-visible {
+  display: block;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 28px 0 24px;
+}
+
+/* ==========================================================================
+   Checkbox
+   ========================================================================== */
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfcfd;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.checkbox:hover {
+  border-color: var(--navy-700);
+}
+
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox__box {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid var(--ink-400);
+  border-radius: 4px;
+  position: relative;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.checkbox__box::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.12s ease;
+}
+
+.checkbox input:checked ~ .checkbox__box {
+  background: var(--navy-800);
+  border-color: var(--navy-800);
+}
+
+.checkbox input:checked ~ .checkbox__box::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.checkbox input:focus-visible ~ .checkbox__box {
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.18);
+}
+
+.checkbox__text {
+  font-size: 14.5px;
+  color: var(--ink-900);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Log field (collapses when "no AI used" is checked)
+   ========================================================================== */
+.log-field {
+  margin-top: 18px;
+  max-height: 500px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.25s ease, opacity 0.2s ease, margin 0.25s ease;
+}
+
+.log-field.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Submit row
+   ========================================================================== */
+.submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.submit-row--stacked {
+  flex-direction: column-reverse;
+  align-items: stretch;
+}
+
+.submit-row--stacked .status {
+  text-align: center;
+}
+
+.status {
+  font-size: 13.5px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.status.is-success { color: var(--success); }
+.status.is-error { color: var(--error); }
+
+.submit-btn {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--navy-800);
+  border: none;
+  border-radius: 8px;
+  padding: 12px 22px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+
+.submit-btn:hover {
+  background: var(--navy-700);
+}
+
+.submit-btn:active {
+  transform: translateY(1px);
+}
+
+.submit-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 179, 233, 0.45);
+}
+
+.submit-btn:disabled {
+  background: var(--ink-400);
+  cursor: not-allowed;
+}
+
+.submit-btn--full {
+  width: 100%;
+  text-align: center;
+}
+
+/* ==========================================================================
+   Success state
+   ========================================================================== */
+.card.is-submitted .field,
+.card.is-submitted .divider,
+.card.is-submitted fieldset.field {
+  display: none;
+}
+
+.confirmation {
+  display: none;
+  text-align: center;
+  padding: 12px 0 4px;
+}
+
+.card.is-submitted .confirmation {
+  display: block;
+}
+
+.confirmation__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 20px;
+}
+
+.confirmation__title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.confirmation__text {
+  font-size: 14px;
+  color: var(--ink-600);
+  margin: 0;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 24px 32px;
+}
+
+.site-footer__text {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-400);
+}
+
+.site-footer__link {
+  color: var(--navy-700);
+  text-decoration: none;
+  margin-left: 6px;
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+}
+
+.site-footer__link:hover {
+  text-decoration: underline;
+}
+
+.site-footer__link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.14);
+  border-radius: 3px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 480px) {
+  .ribbon { padding: 36px 20px 64px; }
+  .ribbon__title { font-size: 27px; }
+  .card { padding: 26px 20px 24px; }
+  .submit-row { flex-direction: column-reverse; align-items: stretch; }
+  .submit-btn { width: 100%; text-align: center; }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
