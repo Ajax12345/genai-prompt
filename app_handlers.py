@@ -1,10 +1,12 @@
 import mdb, uuid
+import urllib.parse
 
 class PromptSave:
     '''
     CREATE TABLE prompts (
         id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
         student_email text NOT NULL,
+        assignment uuid,
         data jsonb,
         added timestamptz NOT NULL DEFAULT now()
     );
@@ -13,9 +15,10 @@ class PromptSave:
     @classmethod
     def save_prompt_submission(cls, payload:dict) -> dict:
         with mdb.DB(as_dict=True) as db:
-            db.execute('insert into prompts (student_email, data) values (%s, %s)', 
+            db.execute('insert into prompts (student_email, assignment, data) values (%s, %s)', 
                 [
                     payload['student_email'],
+                    payload['assignment_id'],
                     payload,
                 ]
             )
@@ -110,7 +113,13 @@ class Courses:
         return {'course_id': course_id}
 
     @classmethod
-    def get_courses(cls, user_id:str) -> dict:
+    def get_courses(
+        cls, 
+        user_id:str, 
+        host_url:str,
+        course_id:str = None, 
+        assignment_id:str = None) -> dict:
+
         with mdb.DB(as_dict=True) as db:
             db.execute(
                 '''
@@ -120,7 +129,13 @@ class Courses:
                     'assignments', (
                         select jsonb_agg(
                             jsonb_build_object(
-                                'assignment_id', a.id
+                                'assignment_id', a.id,
+                                'submissions', (
+                                    select jsonb_agg(p.data) 
+                                    from prompts p
+                                    where p.assignment = a.id
+                                ),
+                                'added', a.added
                             ) || a.data
                         ) from assignments a
                         where a.course = c.id
@@ -132,11 +147,43 @@ class Courses:
                 ''', [user_id]
             )
 
-            courses = [i['course_obj'] for i in db]
+            _courses = [i['course_obj'] for i in db]
+
+        chosen_assignment = None
+        chosen_course = None
+        courses = []
+        for c_i, course in enumerate(_courses):
+            assignments = []
+            for a_i, a in enumerate(sorted(course['assignments'] or [], key=lambda x:x['added'])):
+                p = {
+                    **a,
+                    'is_active': 'is-active' if a['assignment_id'] == assignment_id or (assignment_id is None and not c_i and not a_i) else ''
+                }
+
+                p['submitted_text'] = f'{(T:=len(a["submissions"] or []))} Submission{"" if T == 1 else "s"}'
+
+                if p['is_active'] == 'is-active':
+                    chosen_assignment = p
+                    chosen_course = course
+
+                assignments.append(p)
+
+            courses.append({**course, 'assignments': assignments})
+
+        print(chosen_assignment)
+
+        if chosen_assignment:
+            chosen_assignment['submission_link'] = urllib.parse.urljoin(
+                host_url,
+                f'/prompt/{chosen_assignment["assignment_id"]}'
+            )
 
         return {
             'has_courses': bool(courses),
-            'courses': courses
+            'courses': courses,
+            'has_selected_assignment': bool(chosen_assignment),
+            'assignment': chosen_assignment,
+            'course': chosen_course,
         }
 
 
@@ -154,10 +201,10 @@ class Assignments:
         assignment_id = str(uuid.uuid4())
         with mdb.DB(as_dict=True) as db:
             db.execute('''
-                insert into assignments (id, data) values (
-                    %s, %s
+                insert into assignments (id, course, data) values (
+                    %s, %s, %s
                 )
-            ''', [assignment_id, payload])
+            ''', [assignment_id, payload['course_id'], payload])
 
             db.commit()
             

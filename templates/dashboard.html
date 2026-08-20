@@ -47,9 +47,9 @@
           <ul class="entity-list entity-list--nested">
             {% for assignment in course.assignments %}
             <li>
-              <a class="entity-item is-active" href="/instructor/dashboard?course={{course.course_id}}&assignment={{assignment.assignment_id}}">
+              <a class="entity-item {{assignment.is_active}}" href="/instructor/dashboard?course={{course.course_id}}&assignment={{assignment.assignment_id}}">
                 <span class="entity-item__name">{{assignment.name}}</span>
-                <span class="entity-item__meta">X submitted</span>
+                <span class="entity-item__meta">{{assignment.submitted_text}}</span>
               </a>
             </li>
             {%endfor%}
@@ -79,10 +79,11 @@
 
     <!-- ===================== Column 2: Submissions (75%) ===================== -->
     <section class="col col--submissions">
+        {% if side_bar_data.has_selected_assignment%}
       <div class="col__header">
         <div>
-          <h2 class="col__title">Homework 1: Sorting</h2>
-          <span class="col__subtitle">Introduction to Algorithms &middot; COSI 121A</span>
+          <h2 class="col__title">{{side_bar_data.assignment.name}}</h2>
+          <span class="col__subtitle">{{side_bar_data.course.name}} &middot; {{side_bar_data.course.code}}</span>
         </div>
       </div>
       <div class="col__body">
@@ -138,9 +139,6 @@
                   <span class="gauge__value-number">63%</span>
                 </div>
               </div>
-              <!--
-              <span class="status-pill status-pill--amber">Mixed usage</span>
-            -->
             </div>
           </div>
 
@@ -152,7 +150,7 @@
                 type="text"
                 id="share-link-input"
                 readonly
-                value="http://127.0.0.1:5000/?course_id=cosi121a&assignment_id=hw1"
+                value="{{side_bar_data.assignment.submission_link}}"
               />
               <button class="btn-primary btn-primary--small" id="copy-link-btn" type="button">Copy</button>
             </div>
@@ -224,6 +222,9 @@
         <p class="empty-state">No submissions yet.</p>
         -->
       </div>
+      {% else %}
+        <p class="empty-state">No courses or assignments created yet.</p>
+      {%endif%}
     </section>
 
   </div>

@@ -89,7 +89,10 @@ def instructor_dashboard() -> str:
         'dashboard.html',
         user = flask.session['user']['data'],
         side_bar_data = app_handlers.Courses.get_courses(
-            flask.session['user']['id']
+            flask.session['user']['id'],
+            flask.request.host_url,
+            course_id = course_id,
+            assignment_id = assignment_id
         ),
     )
 
