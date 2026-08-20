@@ -90,16 +90,16 @@
         <div class="overview-row">
           <div class="overview-card">
             <div class="overview-card__stats">
-              <p class="stat-card__value">8</p>
-              <p class="stat-card__label">Submissions received</p>
+              <p class="stat-card__value">{{side_bar_data.assignment.total_submissions}}</p>
+              <p class="stat-card__label">{{side_bar_data.assignment.total_submissions_text}}</p>
               <div class="gauge-legend gauge-legend--stacked">
                 <span class="gauge-legend__item">
                   <span class="gauge-legend__dot gauge-legend__dot--used"></span>
-                  Used AI &middot; 5
+                  Used AI &middot; {{side_bar_data.assignment.is_ai}}
                 </span>
                 <span class="gauge-legend__item">
                   <span class="gauge-legend__dot gauge-legend__dot--none"></span>
-                  Did not &middot; 3
+                  Did not &middot; {{side_bar_data.assignment.not_ai}}
                 </span>
               </div>
             </div>
@@ -132,11 +132,11 @@
                     stroke-width="16"
                     stroke-linecap="round"
                     stroke-dasharray="219.91"
-                    stroke-dashoffset="81.4"
+                    stroke-dashoffset="{{side_bar_data.assignment.offset}}"
                   />
                 </svg>
                 <div class="gauge__value">
-                  <span class="gauge__value-number">63%</span>
+                  <span class="gauge__value-number">{{side_bar_data.assignment.percentage}}%</span>
                 </div>
               </div>
             </div>
@@ -157,6 +157,7 @@
           </div>
         </div>
 
+        {%if side_bar_data.assignment.submissions %}
         <h3 class="field__label field__label--sub">Students who have submitted</h3>
         <table class="submissions-table">
           <thead>
@@ -167,49 +168,23 @@
             </tr>
           </thead>
           <tbody>
+            {% for submission in side_bar_data.assignment.submissions%}
             <tr>
-              <td class="submissions-table__email">alice.chen@brandeis.edu</td>
-              <td>Aug 12, 2026 &middot; 9:14 AM</td>
+              <td class="submissions-table__email">{{submission.email}}</td>
+              <td>{{submission.timestamp}}</td>
+              {%if submission.used_ai%}
               <td><span class="ai-pill ai-pill--yes">Yes</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">brendan.oleary@brandeis.edu</td>
-              <td>Aug 12, 2026 &middot; 11:47 PM</td>
+              {%else%}
               <td><span class="ai-pill ai-pill--no">No</span></td>
+              {%endif%}
             </tr>
-            <tr>
-              <td class="submissions-table__email">carla.mendes@brandeis.edu</td>
-              <td>Aug 13, 2026 &middot; 2:03 PM</td>
-              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">devon.singh@brandeis.edu</td>
-              <td>Aug 13, 2026 &middot; 6:29 PM</td>
-              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">emi.tanaka@brandeis.edu</td>
-              <td>Aug 14, 2026 &middot; 8:55 AM</td>
-              <td><span class="ai-pill ai-pill--no">No</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">farrah.malik@brandeis.edu</td>
-              <td>Aug 14, 2026 &middot; 10:12 PM</td>
-              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">george.papadopoulos@brandeis.edu</td>
-              <td>Aug 15, 2026 &middot; 1:08 PM</td>
-              <td><span class="ai-pill ai-pill--no">No</span></td>
-            </tr>
-            <tr>
-              <td class="submissions-table__email">hana.kim@brandeis.edu</td>
-              <td>Aug 15, 2026 &middot; 11:59 PM</td>
-              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
-            </tr>
+            
+            {%endfor%}
           </tbody>
         </table>
-
+        {%else%}
+        <p class="empty-state">No submissions yet.</p>
+        {%endif%}
         <!-- Empty state (shown when no course/assignment is selected):
         <p class="empty-state">Select a course and assignment to view submissions.</p>
         -->

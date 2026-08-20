@@ -1,5 +1,7 @@
 import mdb, uuid
 import urllib.parse
+import math
+from datetime import datetime
 
 class PromptSave:
     '''
@@ -148,7 +150,11 @@ class Courses:
                             jsonb_build_object(
                                 'assignment_id', a.id,
                                 'submissions', (
-                                    select jsonb_agg(p.data) 
+                                    select jsonb_agg(
+                                        p.data || jsonb_build_object(
+                                            'added', p.added
+                                        )
+                                    ) 
                                     from prompts p
                                     where p.assignment = a.id
                                 ),
@@ -194,6 +200,30 @@ class Courses:
                 host_url,
                 f'/prompt/{chosen_assignment["assignment_id"]}'
             )
+
+            chosen_assignment['total_submissions'] = len(chosen_assignment['submissions'] or [])
+            chosen_assignment['total_submissions_text'] = f'Submission{"s" if chosen_assignment['total_submissions'] != 1 else ""} received'
+            submissions = []
+            is_ai, not_ai = 0, 0
+            for submission in chosen_assignment['submissions'] or []:
+                if submission['used_ai']:
+                    is_ai += 1
+                else:
+                    not_ai += 1
+
+                dt = datetime.fromisoformat(submission['added'])
+
+                submissions.append({
+                    'email': submission['student_email'],
+                    'timestamp': dt.strftime('%b %-d, %Y \u00b7 %-I:%M %p'),
+                    'used_ai': submission['used_ai'],
+                })
+
+            chosen_assignment['is_ai'] = is_ai
+            chosen_assignment['not_ai'] = not_ai
+            chosen_assignment['percentage'] = round((is_ai/(is_ai + not_ai or 1))*100, 0)
+            chosen_assignment['offset'] = math.pi * 70 * (1 - (is_ai/(is_ai + not_ai or 1)))
+            chosen_assignment['submissions'] = submissions
 
         return {
             'has_courses': bool(courses),
