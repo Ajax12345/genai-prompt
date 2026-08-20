@@ -17,13 +17,10 @@
   <header class="topbar">
     <div class="topbar__brand">
       <span class="topbar__brand-mark">AI</span>
-      <!--
-      <span class="topbar__brand-name">COSI Student AI Usage <span class="topbar__brand-sub">Instructor</span></span>
-    -->
-    <span class="topbar__brand-name">COSI Student AI Usage</span>
+      <span class="topbar__brand-name">COSI Student AI Usage</span>
     </div>
     <div class="topbar__user">
-      <span class="topbar__name">James Petullo</span>
+      <span class="topbar__name">{{user.name}}</span>
       <a class="btn-secondary btn-secondary--small" href="/instructor/logout" style="text-decoration:none">Sign out</a>
     </div>
   </header>
@@ -207,7 +204,7 @@
               </div>
               <!--
               <span class="status-pill status-pill--amber">Mixed usage</span>
-                -->
+            -->
             </div>
           </div>
 
@@ -299,7 +296,7 @@
   <div class="modal-overlay" id="new-course-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="new-course-title">
       <h2 class="modal__title" id="new-course-title">New course</h2>
-      <form id="new-course-form" method="post" action="/instructor/courses">
+      <form id="new-course-form" method="post">
         <div class="field">
           <label class="field__label" for="course-name">Course name</label>
           <input
@@ -324,9 +321,10 @@
             required
           />
         </div>
+        <p class="status" id="new-course-status" role="status" aria-live="polite"></p>
         <div class="modal__actions">
           <button class="btn-secondary" type="button" data-close-modal="new-course-overlay">Cancel</button>
-          <button class="btn-primary" type="submit">Create course</button>
+          <button class="btn-primary" type="submit" id="create-course-btn">Create course</button>
         </div>
       </form>
     </div>
@@ -337,7 +335,7 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="new-assignment-title">
       <h2 class="modal__title" id="new-assignment-title">New assignment</h2>
       <p class="modal__subtitle" id="new-assignment-subtitle"></p>
-      <form id="new-assignment-form" method="post" action="/instructor/courses/cosi121a/assignments">
+      <form id="new-assignment-form" method="post">
         <div class="field">
           <label class="field__label" for="assignment-name">Assignment name</label>
           <input
@@ -350,9 +348,10 @@
             required
           />
         </div>
+        <p class="status" id="new-assignment-status" role="status" aria-live="polite"></p>
         <div class="modal__actions">
           <button class="btn-secondary" type="button" data-close-modal="new-assignment-overlay">Cancel</button>
-          <button class="btn-primary" type="submit">Create assignment</button>
+          <button class="btn-primary" type="submit" id="create-assignment-btn">Create assignment</button>
         </div>
       </form>
     </div>

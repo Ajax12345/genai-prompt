@@ -15,7 +15,7 @@ def is_loggedin(f:Callable) -> Callable:
     @functools.wraps(f)
     def wrapper(*args, **kwargs) -> Any:
         if flask.session.get('user', None) is None:
-            return "<h1>404</h1>", 404
+            return flask.redirect('/instructor/login')
 
         return f(*args, **kwargs)
 
@@ -64,21 +64,39 @@ def api_instructor_login() -> tuple:
 
     return flask.jsonify({"error": resp['message']}), 401
 
+@app.route('/api/instructor/new-course', methods = ['POST'])
+def api_instructor_new_course() -> tuple:
+    resp = app_handlers.Courses.create_course(
+        flask.session['user']['id'],
+        flask.request.get_json()
+    )
+    return flask.jsonify(resp)
+
+@app.route('/api/instructor/new-assignment', methods = ['POST'])
+def api_instructor_new_assignment() -> tuple:
+    resp = app_handlers.Assignments.create_assignment(
+        flask.session['user']['id'],
+        flask.request.get_json()
+    )
+    return flask.jsonify(resp)
+
 @app.route('/instructor/dashboard', methods = ['GET'])
 @is_loggedin
 def instructor_dashboard() -> str:
-    return "<h1>Coming soon</h1>"
+    course_id = flask.request.args.get('course')
+    assignment_id = flask.request.args.get('assignment')
+    return flask.render_template(
+        'dashboard.html',
+        user = flask.session['user']['data'],
+        side_bar_data = app_handlers.Courses.get_courses(
+            flask.session['user']['id']
+        ),
+    )
 
 @app.route('/instructor/logout', methods = ['GET'])
 def instructor_logout() -> str:
     flask.session.clear()
     return flask.redirect('/')
-
-
-@app.route('/dashboard', methods =['GET'])
-def dashboard_staging() -> str:
-    return flask.render_template('dashboard.html')
-
 
 '''
 @app.after_request
