@@ -27,82 +27,127 @@
 
   <div class="dashboard-columns">
 
-    <!-- ===================== Column 1: Courses ===================== -->
+    <!-- ===================== Column 1: Courses + Assignments (25%) ===================== -->
     <section class="col col--courses">
       <div class="col__header">
         <h2 class="col__title">Courses</h2>
-        <button class="btn-primary btn-primary--small" type="button" id="new-course-btn">+ New</button>
+        <button class="btn-primary btn-primary--small" type="button" id="new-course-btn">+ New course</button>
       </div>
       <div class="col__body">
-        <ul class="entity-list">
-          <li>
-            <a class="entity-item is-active" href="/instructor/dashboard?course_id=cosi121a">
-              <span class="entity-item__code">COSI 121A</span>
-              <span class="entity-item__name">Introduction to Algorithms</span>
-            </a>
-          </li>
-          <li>
-            <a class="entity-item" href="/instructor/dashboard?course_id=cosi131a">
-              <span class="entity-item__code">COSI 131A</span>
-              <span class="entity-item__name">Operating Systems</span>
-            </a>
-          </li>
-          <li>
-            <a class="entity-item" href="/instructor/dashboard?course_id=cosi216">
-              <span class="entity-item__code">COSI 216</span>
-              <span class="entity-item__name">Machine Learning</span>
-            </a>
-          </li>
-        </ul>
+
+        <div class="course-group">
+          <div class="course-group__header">
+            <div>
+              <span class="course-group__code">COSI 121A</span>
+              <span class="course-group__name">Introduction to Algorithms</span>
+            </div>
+            <button
+              class="icon-btn"
+              type="button"
+              data-new-assignment
+              data-course-id="cosi121a"
+              title="New assignment for COSI 121A"
+            >+</button>
+          </div>
+          <ul class="entity-list entity-list--nested">
+            <li>
+              <a class="entity-item is-active" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw1">
+                <span class="entity-item__name">Homework 1: Sorting</span>
+                <span class="entity-item__meta">8 submitted</span>
+              </a>
+            </li>
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw2">
+                <span class="entity-item__name">Homework 2: Graph Traversal</span>
+                <span class="entity-item__meta">5 submitted</span>
+              </a>
+            </li>
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=mt1">
+                <span class="entity-item__name">Midterm Reflection</span>
+                <span class="entity-item__meta">3 submitted</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="course-group">
+          <div class="course-group__header">
+            <div>
+              <span class="course-group__code">COSI 131A</span>
+              <span class="course-group__name">Operating Systems</span>
+            </div>
+            <button
+              class="icon-btn"
+              type="button"
+              data-new-assignment
+              data-course-id="cosi131a"
+              title="New assignment for COSI 131A"
+            >+</button>
+          </div>
+          <ul class="entity-list entity-list--nested">
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi131a&assignment_id=lab1">
+                <span class="entity-item__name">Lab 1: Shell Scripting</span>
+                <span class="entity-item__meta">6 submitted</span>
+              </a>
+            </li>
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi131a&assignment_id=lab2">
+                <span class="entity-item__name">Lab 2: Threads &amp; Synchronization</span>
+                <span class="entity-item__meta">4 submitted</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="course-group">
+          <div class="course-group__header">
+            <div>
+              <span class="course-group__code">COSI 216</span>
+              <span class="course-group__name">Machine Learning</span>
+            </div>
+            <button
+              class="icon-btn"
+              type="button"
+              data-new-assignment
+              data-course-id="cosi216"
+              title="New assignment for COSI 216"
+            >+</button>
+          </div>
+          <ul class="entity-list entity-list--nested">
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi216&assignment_id=p1">
+                <span class="entity-item__name">Project 1: Classifier</span>
+                <span class="entity-item__meta">7 submitted</span>
+              </a>
+            </li>
+            <li>
+              <a class="entity-item" href="/instructor/dashboard?course_id=cosi216&assignment_id=p2">
+                <span class="entity-item__name">Project 2: Neural Network from Scratch</span>
+                <span class="entity-item__meta">2 submitted</span>
+              </a>
+            </li>
+          </ul>
+        </div>
 
         <!-- Empty state (shown when the instructor has no courses yet):
         <p class="empty-state">You haven't created any courses yet.</p>
         -->
-      </div>
-    </section>
 
-    <!-- ===================== Column 2: Assignments ===================== -->
-    <section class="col col--assignments">
-      <div class="col__header">
-        <h2 class="col__title">Introduction to Algorithms</h2>
-        <button class="btn-primary btn-primary--small" type="button" id="new-assignment-btn">+ New</button>
-      </div>
-      <div class="col__body">
-        <ul class="entity-list">
-          <li>
-            <a class="entity-item is-active" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw1">
-              <span class="entity-item__name">Homework 1: Sorting</span>
-              <span class="entity-item__meta">8 submitted</span>
-            </a>
-          </li>
-          <li>
-            <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw2">
-              <span class="entity-item__name">Homework 2: Graph Traversal</span>
-              <span class="entity-item__meta">5 submitted</span>
-            </a>
-          </li>
-          <li>
-            <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=mt1">
-              <span class="entity-item__name">Midterm Reflection</span>
-              <span class="entity-item__meta">3 submitted</span>
-            </a>
-          </li>
-        </ul>
-
-        <!-- Empty state (shown when no course is selected):
-        <p class="empty-state">Select a course to view its assignments.</p>
-        -->
-
-        <!-- Empty state (shown when the selected course has no assignments yet):
-        <p class="empty-state">No assignments yet for this course.</p>
+        <!-- Per-course empty state (shown under a course with no assignments yet):
+        <p class="empty-state empty-state--nested">No assignments yet for this course.</p>
         -->
       </div>
     </section>
 
-    <!-- ===================== Column 3: Submissions ===================== -->
+    <!-- ===================== Column 2: Submissions (75%) ===================== -->
     <section class="col col--submissions">
       <div class="col__header">
-        <h2 class="col__title">Homework 1: Sorting</h2>
+        <div>
+          <h2 class="col__title">Homework 1: Sorting</h2>
+          <span class="col__subtitle">Introduction to Algorithms &middot; COSI 121A</span>
+        </div>
       </div>
       <div class="col__body">
         <div class="stat-row">
@@ -195,6 +240,7 @@
   <div class="modal-overlay" id="new-assignment-overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="new-assignment-title">
       <h2 class="modal__title" id="new-assignment-title">New assignment</h2>
+      <p class="modal__subtitle" id="new-assignment-subtitle"></p>
       <form id="new-assignment-form" method="post" action="/instructor/courses/cosi121a/assignments">
         <div class="field">
           <label class="field__label" for="assignment-name">Assignment name</label>

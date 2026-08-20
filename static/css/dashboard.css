@@ -537,7 +537,7 @@ fieldset.field {
 .dashboard-columns {
   flex: 1;
   display: grid;
-  grid-template-columns: 25% 25% 50%;
+  grid-template-columns: 25% 75%;
   min-height: 0;
 }
 
@@ -573,6 +573,13 @@ fieldset.field {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.col__subtitle {
+  display: block;
+  font-size: 12.5px;
+  color: var(--ink-400);
+  margin-top: 3px;
 }
 
 .col__body {
@@ -637,6 +644,83 @@ fieldset.field {
 }
 
 /* ==========================================================================
+   Dashboard: course groups (course header + nested assignment list)
+   ========================================================================== */
+.course-group {
+  margin-bottom: 22px;
+}
+
+.course-group + .course-group {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.course-group__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  margin-bottom: 8px;
+}
+
+.course-group__code {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--cyan-500);
+  text-transform: uppercase;
+}
+
+.course-group__name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink-900);
+  margin-top: 1px;
+}
+
+.entity-list--nested {
+  padding-left: 6px;
+  border-left: 1px solid var(--border);
+  margin-left: 12px;
+}
+
+.entity-list--nested .entity-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.entity-list--nested .entity-item__name {
+  font-size: 13px;
+  font-weight: 450;
+}
+
+.icon-btn {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--ink-600);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease;
+}
+
+.icon-btn:hover {
+  border-color: var(--navy-700);
+  color: var(--navy-800);
+}
+
+/* ==========================================================================
    Dashboard: buttons
    ========================================================================== */
 .btn-primary {
@@ -695,6 +779,12 @@ fieldset.field {
   border: 1px dashed var(--border);
   border-radius: 10px;
   margin-top: 8px;
+}
+
+.empty-state--nested {
+  margin: 6px 0 0 12px;
+  padding: 14px;
+  font-size: 12.5px;
 }
 
 /* ==========================================================================
@@ -806,8 +896,14 @@ fieldset.field {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 19px;
-  margin: 0 0 18px;
+  margin: 0 0 4px;
   color: var(--ink-900);
+}
+
+.modal__subtitle {
+  font-size: 13px;
+  color: var(--ink-400);
+  margin: 0 0 18px;
 }
 
 .modal__actions {

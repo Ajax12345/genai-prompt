@@ -19,7 +19,22 @@ $(function () {
     openModal($("#new-course-overlay"));
   });
 
-  $("#new-assignment-btn").on("click", function () {
+  // Each course group has its own "+ New assignment" trigger now that
+  // courses/assignments live in one merged column. Read the course id
+  // off the button and point the form at that course before opening.
+  $("[data-new-assignment]").on("click", function () {
+    const courseId = $(this).data("course-id");
+    const courseLabel = $(this)
+      .closest(".course-group")
+      .find(".course-group__code")
+      .text();
+
+    $("#new-assignment-form").attr(
+      "action",
+      "/instructor/courses/" + encodeURIComponent(courseId) + "/assignments"
+    );
+    $("#new-assignment-subtitle").text(courseLabel ? "For " + courseLabel : "");
+
     openModal($("#new-assignment-overlay"));
   });
 
