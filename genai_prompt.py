@@ -45,6 +45,9 @@ def api_prompts() -> dict:
 
 @app.route('/instructor/login', methods = ['GET'])
 def instructor_login() -> str:
+    if flask.session.get('user', None) is not None:
+        return flask.redirect('/instructor/dashboard')
+
     return flask.render_template('login.html')
 
 @app.route('/api/instructor/login', methods = ['POST'])
