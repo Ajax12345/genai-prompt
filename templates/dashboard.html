@@ -34,109 +34,45 @@
         <button class="btn-primary btn-primary--small" type="button" id="new-course-btn">+ New course</button>
       </div>
       <div class="col__body">
-
+        {% if side_bar_data.has_courses %}
+        {% for course in side_bar_data.courses %}
         <div class="course-group">
           <div class="course-group__header">
             <div>
-              <span class="course-group__code">COSI 121A</span>
-              <span class="course-group__name">Introduction to Algorithms</span>
+              <span class="course-group__code">{{course.code}}</span>
+              <span class="course-group__name">{{course.name}}</span>
             </div>
           </div>
+          {% if course.assignments %}
           <ul class="entity-list entity-list--nested">
+            {% for assignment in course.assignments %}
             <li>
-              <a class="entity-item is-active" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw1">
-                <span class="entity-item__name">Homework 1: Sorting</span>
-                <span class="entity-item__meta">8 submitted</span>
+              <a class="entity-item is-active" href="/instructor/dashboard?course={{course.course_id}}&assignment={{assignment.assignment_id}}">
+                <span class="entity-item__name">{{assignment.name}}</span>
+                <span class="entity-item__meta">X submitted</span>
               </a>
             </li>
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=hw2">
-                <span class="entity-item__name">Homework 2: Graph Traversal</span>
-                <span class="entity-item__meta">5 submitted</span>
-              </a>
-            </li>
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi121a&assignment_id=mt1">
-                <span class="entity-item__name">Midterm Reflection</span>
-                <span class="entity-item__meta">3 submitted</span>
-              </a>
-            </li>
+            {%endfor%}
           </ul>
+          {% else %}
+          <p class="empty-state empty-state--nested">No assignments yet for this course.</p>
+          {% endif %}
           <button
             class="btn-secondary btn-secondary--small course-group__add-btn"
             type="button"
             data-new-assignment
-            data-course-id="cosi121a"
-            title="New assignment for COSI 121A"
+            data-course-id="{{course.course_id}}"
+            title="New assignment for {{course.name}}"
           >+ New Assignment</button>
         </div>
-
-        <div class="course-group">
-          <div class="course-group__header">
-            <div>
-              <span class="course-group__code">COSI 131A</span>
-              <span class="course-group__name">Operating Systems</span>
-            </div>
-          </div>
-          <ul class="entity-list entity-list--nested">
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi131a&assignment_id=lab1">
-                <span class="entity-item__name">Lab 1: Shell Scripting</span>
-                <span class="entity-item__meta">6 submitted</span>
-              </a>
-            </li>
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi131a&assignment_id=lab2">
-                <span class="entity-item__name">Lab 2: Threads &amp; Synchronization</span>
-                <span class="entity-item__meta">4 submitted</span>
-              </a>
-            </li>
-          </ul>
-          <button
-            class="btn-secondary btn-secondary--small course-group__add-btn"
-            type="button"
-            data-new-assignment
-            data-course-id="cosi131a"
-            title="New assignment for COSI 131A"
-          >+ New Assignment</button>
-        </div>
-
-        <div class="course-group">
-          <div class="course-group__header">
-            <div>
-              <span class="course-group__code">COSI 216</span>
-              <span class="course-group__name">Machine Learning</span>
-            </div>
-          </div>
-          <ul class="entity-list entity-list--nested">
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi216&assignment_id=p1">
-                <span class="entity-item__name">Project 1: Classifier</span>
-                <span class="entity-item__meta">7 submitted</span>
-              </a>
-            </li>
-            <li>
-              <a class="entity-item" href="/instructor/dashboard?course_id=cosi216&assignment_id=p2">
-                <span class="entity-item__name">Project 2: Neural Network from Scratch</span>
-                <span class="entity-item__meta">2 submitted</span>
-              </a>
-            </li>
-          </ul>
-          <button
-            class="btn-secondary btn-secondary--small course-group__add-btn"
-            type="button"
-            data-new-assignment
-            data-course-id="cosi216"
-            title="New assignment for COSI 216"
-          >+ New Assignment</button>
-        </div>
-
-        <!-- Empty state (shown when the instructor has no courses yet):
+        {% endfor %}
+        {%else%}
         <p class="empty-state">You haven't created any courses yet.</p>
-        -->
+        {%endif%}
+      
 
         <!-- Per-course empty state (shown under a course with no assignments yet):
-        <p class="empty-state empty-state--nested">No assignments yet for this course.</p>
+        
         -->
       </div>
     </section>

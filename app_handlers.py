@@ -118,7 +118,11 @@ class Courses:
                     'course_id', c.id
                 ) || c.data || jsonb_build_object(
                     'assignments', (
-                        select jsonb_agg(a.data) from assignments a
+                        select jsonb_agg(
+                            jsonb_build_object(
+                                'assignment_id', a.id
+                            ) || a.data
+                        ) from assignments a
                         where a.course = c.id
                     )
                 ) course_obj
