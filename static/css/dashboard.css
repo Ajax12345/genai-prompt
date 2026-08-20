@@ -17,7 +17,7 @@
   --border: #dde4ec;
 
   --success: #1e824c;
-  --success-bg: #eaf6ef;
+  --success-bg: #d4f2e1;
   --error: #c0392b;
   --error-bg: #fbebe9;
 
@@ -1018,7 +1018,7 @@ fieldset.field {
 }
 
 .ai-pill--no {
-  background: #eef1f5;
+  background: #e0e5ec;
   color: var(--ink-600);
 }
 
