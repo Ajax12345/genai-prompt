@@ -7,7 +7,6 @@ from typing import (
     Any
 )
 
-
 app = flask.Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.secret_key = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
@@ -74,6 +73,11 @@ def instructor_dashboard() -> str:
 def instructor_logout() -> str:
     flask.session.clear()
     return flask.redirect('/')
+
+
+@app.route('/dashboard', methods =['GET'])
+def dashboard_staging() -> str:
+    return flask.render_template('dashboard.html')
 
 
 '''

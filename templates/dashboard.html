@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructor Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}" />
+</head>
+<body class="dashboard-body">
+
+  {#
+    ------------------------------------------------------------------
+    PLACEHOLDER DATA — everything below stands in for real records.
+    Replace with values passed from the Flask view once courses,
+    assignments, and submissions are backed by the database.
+    course_id / assignment_id selection comes from the query string,
+    e.g. /instructor/dashboard?course_id=cosi121a&assignment_id=hw2
+    ------------------------------------------------------------------
+  #}
+  {% set instructor_name = instructor_name or "James Petullo" %}
+
+  {% set courses = [
+    {
+      "id": "cosi121a",
+      "code": "COSI 121A",
+      "name": "Introduction to Algorithms",
+      "assignments": [
+        {
+          "id": "hw1",
+          "name": "Homework 1: Sorting",
+          "submissions": [
+            "alice.chen@brandeis.edu", "brendan.oleary@brandeis.edu", "carla.mendes@brandeis.edu",
+            "devon.singh@brandeis.edu", "emi.tanaka@brandeis.edu", "farrah.malik@brandeis.edu",
+            "george.papadopoulos@brandeis.edu", "hana.kim@brandeis.edu"
+          ]
+        },
+        {
+          "id": "hw2",
+          "name": "Homework 2: Graph Traversal",
+          "submissions": [
+            "alice.chen@brandeis.edu", "carla.mendes@brandeis.edu", "devon.singh@brandeis.edu",
+            "hana.kim@brandeis.edu", "ian.foster@brandeis.edu"
+          ]
+        },
+        {
+          "id": "mt1",
+          "name": "Midterm Reflection",
+          "submissions": [
+            "brendan.oleary@brandeis.edu", "emi.tanaka@brandeis.edu", "george.papadopoulos@brandeis.edu"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cosi131a",
+      "code": "COSI 131A",
+      "name": "Operating Systems",
+      "assignments": [
+        {
+          "id": "lab1",
+          "name": "Lab 1: Shell Scripting",
+          "submissions": [
+            "julia.novak@brandeis.edu", "kwame.osei@brandeis.edu", "liam.brennan@brandeis.edu",
+            "maya.rosenberg@brandeis.edu", "noah.patel@brandeis.edu", "olga.ivanova@brandeis.edu"
+          ]
+        },
+        {
+          "id": "lab2",
+          "name": "Lab 2: Threads & Synchronization",
+          "submissions": [
+            "julia.novak@brandeis.edu", "liam.brennan@brandeis.edu",
+            "maya.rosenberg@brandeis.edu", "noah.patel@brandeis.edu"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cosi216",
+      "code": "COSI 216",
+      "name": "Machine Learning",
+      "assignments": [
+        {
+          "id": "p1",
+          "name": "Project 1: Classifier",
+          "submissions": [
+            "priya.raman@brandeis.edu", "quinn.walsh@brandeis.edu", "rafael.costa@brandeis.edu",
+            "sana.iqbal@brandeis.edu", "tobias.lindgren@brandeis.edu", "uma.krishnan@brandeis.edu",
+            "victor.nguyen@brandeis.edu"
+          ]
+        },
+        {
+          "id": "p2",
+          "name": "Project 2: Neural Network from Scratch",
+          "submissions": [
+            "priya.raman@brandeis.edu", "sana.iqbal@brandeis.edu"
+          ]
+        }
+      ]
+    }
+  ] %}
+
+  {% set selected_course_id = request.args.get('course_id') %}
+  {% set selected_assignment_id = request.args.get('assignment_id') %}
+
+  {% set ns = namespace(selected_course=None, selected_assignment=None) %}
+  {% for c in courses %}
+    {% if c.id == selected_course_id %}{% set ns.selected_course = c %}{% endif %}
+  {% endfor %}
+  {% if ns.selected_course %}
+    {% for a in ns.selected_course.assignments %}
+      {% if a.id == selected_assignment_id %}{% set ns.selected_assignment = a %}{% endif %}
+    {% endfor %}
+  {% endif %}
+
+  <header class="topbar">
+    <div class="topbar__brand">
+      <span class="topbar__brand-mark">AI</span>
+      <span class="topbar__brand-name">AI Usage Log <span class="topbar__brand-sub">Instructor</span></span>
+    </div>
+    <div class="topbar__user">
+      <span class="topbar__name">{{ instructor_name }}</span>
+      <a class="btn-secondary btn-secondary--small" href="/instructor/logout">Sign out</a>
+    </div>
+  </header>
+
+  <div class="dashboard-columns">
+
+    <!-- ===================== Column 1: Courses ===================== -->
+    <section class="col col--courses">
+      <div class="col__header">
+        <h2 class="col__title">Courses</h2>
+        <button class="btn-primary btn-primary--small" type="button" id="new-course-btn">+ New</button>
+      </div>
+      <div class="col__body">
+        {% if courses %}
+          <ul class="entity-list">
+            {% for c in courses %}
+              <li>
+                <a
+                  class="entity-item {{ 'is-active' if ns.selected_course and ns.selected_course.id == c.id else '' }}"
+                  href="/instructor/dashboard?course_id={{ c.id }}"
+                >
+                  <span class="entity-item__code">{{ c.code }}</span>
+                  <span class="entity-item__name">{{ c.name }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="empty-state">You haven't created any courses yet.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ===================== Column 2: Assignments ===================== -->
+    <section class="col col--assignments">
+      <div class="col__header">
+        <h2 class="col__title">
+          {% if ns.selected_course %}{{ ns.selected_course.name }}{% else %}Assignments{% endif %}
+        </h2>
+        {% if ns.selected_course %}
+          <button class="btn-primary btn-primary--small" type="button" id="new-assignment-btn">+ New</button>
+        {% endif %}
+      </div>
+      <div class="col__body">
+        {% if not ns.selected_course %}
+          <p class="empty-state">Select a course to view its assignments.</p>
+        {% elif ns.selected_course.assignments %}
+          <ul class="entity-list">
+            {% for a in ns.selected_course.assignments %}
+              <li>
+                <a
+                  class="entity-item {{ 'is-active' if ns.selected_assignment and ns.selected_assignment.id == a.id else '' }}"
+                  href="/instructor/dashboard?course_id={{ ns.selected_course.id }}&assignment_id={{ a.id }}"
+                >
+                  <span class="entity-item__name">{{ a.name }}</span>
+                  <span class="entity-item__meta">{{ a.submissions | length }} submitted</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="empty-state">No assignments yet for this course.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- ===================== Column 3: Submissions ===================== -->
+    <section class="col col--submissions">
+      <div class="col__header">
+        <h2 class="col__title">
+          {% if ns.selected_assignment %}{{ ns.selected_assignment.name }}{% else %}Submissions{% endif %}
+        </h2>
+      </div>
+      <div class="col__body">
+        {% if not ns.selected_course %}
+          <p class="empty-state">Select a course and assignment to view submissions.</p>
+        {% elif not ns.selected_assignment %}
+          <p class="empty-state">Select an assignment to view its submissions.</p>
+        {% else %}
+          <div class="stat-row">
+            <div class="stat-card">
+              <p class="stat-card__value">{{ ns.selected_assignment.submissions | length }}</p>
+              <p class="stat-card__label">Submissions received</p>
+            </div>
+          </div>
+
+          <div class="share-link">
+            <label class="field__label" for="share-link-input">Disclosure form link for this assignment</label>
+            <div class="share-link__row">
+              <input
+                class="field__input"
+                type="text"
+                id="share-link-input"
+                readonly
+                value="{{ request.host_url }}?course_id={{ ns.selected_course.id }}&assignment_id={{ ns.selected_assignment.id }}"
+              />
+              <button class="btn-primary btn-primary--small" id="copy-link-btn" type="button">Copy</button>
+            </div>
+          </div>
+
+          <h3 class="field__label field__label--sub">Students who have submitted</h3>
+          {% if ns.selected_assignment.submissions %}
+            <ul class="email-list">
+              {% for email in ns.selected_assignment.submissions %}
+                <li class="email-list__item">{{ email }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="empty-state">No submissions yet.</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ===================== New course modal ===================== -->
+  <div class="modal-overlay" id="new-course-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="new-course-title">
+      <h2 class="modal__title" id="new-course-title">New course</h2>
+      <form id="new-course-form" method="post" action="/instructor/courses">
+        <div class="field">
+          <label class="field__label" for="course-name">Course name</label>
+          <input
+            class="field__input"
+            type="text"
+            id="course-name"
+            name="name"
+            placeholder="e.g. Introduction to Algorithms"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="field">
+          <label class="field__label" for="course-code">Course code</label>
+          <input
+            class="field__input"
+            type="text"
+            id="course-code"
+            name="code"
+            placeholder="e.g. COSI-121A"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="modal__actions">
+          <button class="btn-secondary" type="button" data-close-modal="new-course-overlay">Cancel</button>
+          <button class="btn-primary" type="submit">Create course</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== New assignment modal ===================== -->
+  <div class="modal-overlay" id="new-assignment-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="new-assignment-title">
+      <h2 class="modal__title" id="new-assignment-title">New assignment</h2>
+      <form
+        id="new-assignment-form"
+        method="post"
+        action="/instructor/courses/{{ ns.selected_course.id if ns.selected_course else '' }}/assignments"
+      >
+        <div class="field">
+          <label class="field__label" for="assignment-name">Assignment name</label>
+          <input
+            class="field__input"
+            type="text"
+            id="assignment-name"
+            name="name"
+            placeholder="e.g. Homework 3"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="modal__actions">
+          <button class="btn-secondary" type="button" data-close-modal="new-assignment-overlay">Cancel</button>
+          <button class="btn-primary" type="submit">Create assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
