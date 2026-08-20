@@ -17,11 +17,14 @@
   <header class="topbar">
     <div class="topbar__brand">
       <span class="topbar__brand-mark">AI</span>
-      <span class="topbar__brand-name">AI Usage Log <span class="topbar__brand-sub">Instructor</span></span>
+      <!--
+      <span class="topbar__brand-name">COSI Student AI Usage <span class="topbar__brand-sub">Instructor</span></span>
+    -->
+    <span class="topbar__brand-name">COSI Student AI Usage</span>
     </div>
     <div class="topbar__user">
       <span class="topbar__name">James Petullo</span>
-      <a class="btn-secondary btn-secondary--small" href="/instructor/logout">Sign out</a>
+      <a class="btn-secondary btn-secondary--small" href="/instructor/logout" style="text-decoration:none">Sign out</a>
     </div>
   </header>
 
@@ -41,13 +44,6 @@
               <span class="course-group__code">COSI 121A</span>
               <span class="course-group__name">Introduction to Algorithms</span>
             </div>
-            <button
-              class="icon-btn"
-              type="button"
-              data-new-assignment
-              data-course-id="cosi121a"
-              title="New assignment for COSI 121A"
-            >+</button>
           </div>
           <ul class="entity-list entity-list--nested">
             <li>
@@ -69,6 +65,13 @@
               </a>
             </li>
           </ul>
+          <button
+            class="btn-secondary btn-secondary--small course-group__add-btn"
+            type="button"
+            data-new-assignment
+            data-course-id="cosi121a"
+            title="New assignment for COSI 121A"
+          >+ New Assignment</button>
         </div>
 
         <div class="course-group">
@@ -77,13 +80,6 @@
               <span class="course-group__code">COSI 131A</span>
               <span class="course-group__name">Operating Systems</span>
             </div>
-            <button
-              class="icon-btn"
-              type="button"
-              data-new-assignment
-              data-course-id="cosi131a"
-              title="New assignment for COSI 131A"
-            >+</button>
           </div>
           <ul class="entity-list entity-list--nested">
             <li>
@@ -99,6 +95,13 @@
               </a>
             </li>
           </ul>
+          <button
+            class="btn-secondary btn-secondary--small course-group__add-btn"
+            type="button"
+            data-new-assignment
+            data-course-id="cosi131a"
+            title="New assignment for COSI 131A"
+          >+ New Assignment</button>
         </div>
 
         <div class="course-group">
@@ -107,13 +110,6 @@
               <span class="course-group__code">COSI 216</span>
               <span class="course-group__name">Machine Learning</span>
             </div>
-            <button
-              class="icon-btn"
-              type="button"
-              data-new-assignment
-              data-course-id="cosi216"
-              title="New assignment for COSI 216"
-            >+</button>
           </div>
           <ul class="entity-list entity-list--nested">
             <li>
@@ -129,6 +125,13 @@
               </a>
             </li>
           </ul>
+          <button
+            class="btn-secondary btn-secondary--small course-group__add-btn"
+            type="button"
+            data-new-assignment
+            data-course-id="cosi216"
+            title="New assignment for COSI 216"
+          >+ New Assignment</button>
         </div>
 
         <!-- Empty state (shown when the instructor has no courses yet):
@@ -150,38 +153,131 @@
         </div>
       </div>
       <div class="col__body">
-        <div class="stat-row">
-          <div class="stat-card">
-            <p class="stat-card__value">8</p>
-            <p class="stat-card__label">Submissions received</p>
-          </div>
-        </div>
+        <div class="overview-row">
+          <div class="overview-card">
+            <div class="overview-card__stats">
+              <p class="stat-card__value">8</p>
+              <p class="stat-card__label">Submissions received</p>
+              <div class="gauge-legend gauge-legend--stacked">
+                <span class="gauge-legend__item">
+                  <span class="gauge-legend__dot gauge-legend__dot--used"></span>
+                  Used AI &middot; 5
+                </span>
+                <span class="gauge-legend__item">
+                  <span class="gauge-legend__dot gauge-legend__dot--none"></span>
+                  Did not &middot; 3
+                </span>
+              </div>
+            </div>
 
-        <div class="share-link">
-          <label class="field__label" for="share-link-input">Disclosure form link for this assignment</label>
-          <div class="share-link__row">
-            <input
-              class="field__input"
-              type="text"
-              id="share-link-input"
-              readonly
-              value="http://127.0.0.1:5000/?course_id=cosi121a&assignment_id=hw1"
-            />
-            <button class="btn-primary btn-primary--small" id="copy-link-btn" type="button">Copy</button>
+            <div class="overview-divider"></div>
+
+            <div class="overview-card__gauge">
+              <p class="gauge-card__eyebrow">AI usage</p>
+              <div class="gauge">
+                <svg viewBox="0 0 180 108" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="aiGaugeGradient" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" style="stop-color:var(--cyan-500)" />
+                      <stop offset="100%" style="stop-color:var(--navy-700)" />
+                    </linearGradient>
+                  </defs>
+                  <!-- Track (full semicircle) -->
+                  <path
+                    d="M20,98 A70,70 0 1 1 160,98"
+                    fill="none"
+                    stroke="var(--gauge-track)"
+                    stroke-width="16"
+                    stroke-linecap="round"
+                  />
+                  <!-- Progress (percentage of students who used AI) -->
+                  <path
+                    d="M20,98 A70,70 0 1 1 160,98"
+                    fill="none"
+                    stroke="url(#aiGaugeGradient)"
+                    stroke-width="16"
+                    stroke-linecap="round"
+                    stroke-dasharray="219.91"
+                    stroke-dashoffset="81.4"
+                  />
+                </svg>
+                <div class="gauge__value">
+                  <span class="gauge__value-number">63%</span>
+                </div>
+              </div>
+              <!--
+              <span class="status-pill status-pill--amber">Mixed usage</span>
+                -->
+            </div>
+          </div>
+
+          <div class="share-link">
+            <label class="field__label" for="share-link-input">Disclosure form link for this assignment</label>
+            <div class="share-link__row">
+              <input
+                class="field__input field__input--baseline"
+                type="text"
+                id="share-link-input"
+                readonly
+                value="http://127.0.0.1:5000/?course_id=cosi121a&assignment_id=hw1"
+              />
+              <button class="btn-primary btn-primary--small" id="copy-link-btn" type="button">Copy</button>
+            </div>
           </div>
         </div>
 
         <h3 class="field__label field__label--sub">Students who have submitted</h3>
-        <ul class="email-list">
-          <li class="email-list__item">alice.chen@brandeis.edu</li>
-          <li class="email-list__item">brendan.oleary@brandeis.edu</li>
-          <li class="email-list__item">carla.mendes@brandeis.edu</li>
-          <li class="email-list__item">devon.singh@brandeis.edu</li>
-          <li class="email-list__item">emi.tanaka@brandeis.edu</li>
-          <li class="email-list__item">farrah.malik@brandeis.edu</li>
-          <li class="email-list__item">george.papadopoulos@brandeis.edu</li>
-          <li class="email-list__item">hana.kim@brandeis.edu</li>
-        </ul>
+        <table class="submissions-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Submitted</th>
+              <th>Used AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="submissions-table__email">alice.chen@brandeis.edu</td>
+              <td>Aug 12, 2026 &middot; 9:14 AM</td>
+              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">brendan.oleary@brandeis.edu</td>
+              <td>Aug 12, 2026 &middot; 11:47 PM</td>
+              <td><span class="ai-pill ai-pill--no">No</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">carla.mendes@brandeis.edu</td>
+              <td>Aug 13, 2026 &middot; 2:03 PM</td>
+              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">devon.singh@brandeis.edu</td>
+              <td>Aug 13, 2026 &middot; 6:29 PM</td>
+              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">emi.tanaka@brandeis.edu</td>
+              <td>Aug 14, 2026 &middot; 8:55 AM</td>
+              <td><span class="ai-pill ai-pill--no">No</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">farrah.malik@brandeis.edu</td>
+              <td>Aug 14, 2026 &middot; 10:12 PM</td>
+              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">george.papadopoulos@brandeis.edu</td>
+              <td>Aug 15, 2026 &middot; 1:08 PM</td>
+              <td><span class="ai-pill ai-pill--no">No</span></td>
+            </tr>
+            <tr>
+              <td class="submissions-table__email">hana.kim@brandeis.edu</td>
+              <td>Aug 15, 2026 &middot; 11:59 PM</td>
+              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+            </tr>
+          </tbody>
+        </table>
 
         <!-- Empty state (shown when no course/assignment is selected):
         <p class="empty-state">Select a course and assignment to view submissions.</p>
