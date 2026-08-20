@@ -14,8 +14,10 @@ class PromptSave:
 
     @classmethod
     def save_prompt_submission(cls, payload:dict) -> dict:
+        print('save prompt submission')
+        print(payload)
         with mdb.DB(as_dict=True) as db:
-            db.execute('insert into prompts (student_email, assignment, data) values (%s, %s)', 
+            db.execute('insert into prompts (student_email, assignment, data) values (%s, %s, %s)', 
                 [
                     payload['student_email'],
                     payload['assignment_id'],
@@ -25,6 +27,21 @@ class PromptSave:
             db.commit()
 
         return {'success': True}
+
+    @classmethod
+    def meta(cls, assignment_id:str) -> dict:
+        with mdb.DB(as_dict=True) as db:
+            db.execute('''
+                select jsonb_build_object(
+                    'assignment_name', a.data->> 'name',
+                    'course_name', c.data ->> 'name'
+                ) data
+                from assignments a
+                join courses c on c.id = a.course
+                where a.id = %s
+            ''', [assignment_id])
+
+            return db.fetchone()['data']
 
 class Users:
     '''

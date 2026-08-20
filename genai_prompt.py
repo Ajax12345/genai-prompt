@@ -29,9 +29,13 @@ def home() -> str:
 
     return flask.redirect('/instructor/dashboard')
 
-@app.route('/prompt', methods = ['GET'])
-def prompt_submit() -> str:
-    return flask.render_template('index.html')
+@app.route('/prompt/<assignment_id>', methods = ['GET'])
+def prompt_submit(assignment_id:str) -> str:
+    return flask.render_template(
+        'index.html',
+        info = app_handlers.PromptSave.meta(assignment_id),
+        assignment_id = assignment_id
+    )
 
 
 @app.route('/api/prompts', methods = ['POST'])

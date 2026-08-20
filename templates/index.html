@@ -22,11 +22,11 @@
   </header>
 
   <main class="page">
-    <form id="disclosure-form" class="card" novalidate>
+    <form id="disclosure-form" class="card" novalidate data-assignment-id = '{{assignment_id}}'>
 
       <div class="context-bar" id="context-bar" hidden>
-        <span class="context-bar__item" id="context-course"></span>
-        <span class="context-bar__item" id="context-assignment"></span>
+        <span class="context-bar__item" id="context-course">Course: {{info.course_name}}</span>
+        <span class="context-bar__item" id="context-assignment">Assignment: {{info.assignment_name}}</span>
       </div>
 
       <div class="field">

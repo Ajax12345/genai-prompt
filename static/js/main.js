@@ -23,21 +23,10 @@ $(function () {
      to be present in the query string for a submission to be valid.
      ------------------------------------------------------------------ */
   function hydrateFromQueryParams() {
-    const params = new URLSearchParams(window.location.search);
-    const courseId = params.get("course_id");
-    const assignmentId = params.get("assignment_id");
-
-    if (courseId) {
-      $contextCourse.text("Course: " + courseId).prop("hidden", false);
-      $contextBar.prop("hidden", false);
-      $form.data("courseId", courseId);
-    }
-
-    if (assignmentId) {
-      $contextAssignment.text("Assignment: " + assignmentId).prop("hidden", false);
-      $contextBar.prop("hidden", false);
-      $form.data("assignmentId", assignmentId);
-    }
+    
+    const assignmentId = $('#disclosure-form').data("assignment-id");
+    $contextBar.prop("hidden", false);
+    $form.data("assignmentId", assignmentId);
   }
 
   /* ------------------------------------------------------------------
@@ -86,14 +75,6 @@ $(function () {
       valid = false;
     }
 
-    if (!$form.data("courseId")) {
-      setStatus(
-        "This link is missing a course ID. Please use the link your instructor provided.",
-        "error"
-      );
-      valid = false;
-    }
-
     if (!$noAiCheckbox.is(":checked") && !$logTextarea.val().trim()) {
       setFieldError(
         "ai_log",
@@ -137,7 +118,6 @@ $(function () {
     }
 
     const payload = {
-      course_id: $form.data("courseId") || null,
       student_email: $emailInput.val().trim(),
       used_ai: !$noAiCheckbox.is(":checked"),
       ai_log: $noAiCheckbox.is(":checked") ? null : $logTextarea.val().trim(),
