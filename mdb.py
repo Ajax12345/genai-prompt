@@ -1,10 +1,10 @@
 import psycopg2, typing
 import psycopg2.extras, aiopg
 import asyncio, sqlite3
-import json
+import json, os
 
 class DB:
-    DB_URL = 'postgresql://jamesp:NOiMxLDRD3ra3QGrIxopS0XdJANBRxdZ@dpg-da2945rjan9c73a3icgg-a.virginia-postgres.render.com/genai_cf6h'
+    DB_URL = os.environ.get('DATABASE_URL', 'postgresql://jamesp:NOiMxLDRD3ra3QGrIxopS0XdJANBRxdZ@dpg-da2945rjan9c73a3icgg-a/genai_cf6h')
     def __init__(self, as_dict:bool = False) -> None:
         self.as_dict = as_dict
 
