@@ -25,7 +25,7 @@ def is_loggedin(f:Callable) -> Callable:
 @app.route('/', methods = ['GET'])
 def home() -> str:
     if flask.session.get('user', None) is None:
-        return flask.redirect('/prompt')
+        return flask.redirect('/instructor/login')
 
     return flask.redirect('/instructor/dashboard')
 
@@ -103,7 +103,7 @@ def instructor_dashboard() -> str:
 @app.route('/instructor/logout', methods = ['GET'])
 def instructor_logout() -> str:
     flask.session.clear()
-    return flask.redirect('/')
+    return flask.redirect('/instructor/login')
 
 '''
 @app.after_request
