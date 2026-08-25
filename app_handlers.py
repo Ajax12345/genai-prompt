@@ -108,6 +108,39 @@ class Users:
 
             db.commit()
 
+    @classmethod
+    def add_user_google_oauth(cls, name:str, email:str) -> dict:
+        with mdb.DB(as_dict = True) as db:
+            db.execute('''
+            select u.* from users u where u.data ->> 'email' = %s
+            ''', [email])
+
+            result = [*db]
+
+        if result:
+            return {
+                'status': True,
+                'payload': result[0],
+            }
+
+        with mdb.DB(as_dict=True) as db:
+            db.execute('''
+                insert into users (data) values (
+                    jsonb_build_object(
+                        'name', %s,
+                        'email', %s
+                    )
+                ) returning *
+            ''', [name, email])
+
+            payload = db.fetchone()
+            db.commit()
+
+        return {
+            'status': True,
+            'payload': payload,
+        }
+
 class Courses:
     '''
     create table courses (

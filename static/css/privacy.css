@@ -100,6 +100,10 @@ body {
   max-width: 440px;
 }
 
+.page--legal {
+  max-width: 760px;
+}
+
 .card {
   background: var(--surface);
   border-radius: var(--radius);
@@ -107,6 +111,75 @@ body {
   padding: 36px 36px 32px;
   margin-top: -48px;
   position: relative;
+}
+
+/* ==========================================================================
+   Legal document typography (privacy policy, terms, etc.)
+   ========================================================================== */
+.legal {
+  padding: 44px 48px 48px;
+}
+
+.legal-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-400);
+  margin: 0 0 32px;
+}
+
+.legal-section {
+  margin-bottom: 30px;
+}
+
+.legal-section:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--ink-900);
+  margin: 0 0 12px;
+}
+
+.legal-section h3 {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 14.5px;
+  color: var(--ink-900);
+  margin: 18px 0 8px;
+}
+
+.legal-section p {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-900);
+  margin: 0 0 12px;
+}
+
+.legal-section p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-section ul {
+  margin: 0 0 12px;
+  padding-left: 22px;
+}
+
+.legal-section li {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--ink-900);
+  margin-bottom: 6px;
+}
+
+.legal-section a {
+  color: var(--navy-700);
+}
+
+.legal-section a:hover {
+  text-decoration: none;
 }
 
 /* ==========================================================================

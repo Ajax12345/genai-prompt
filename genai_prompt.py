@@ -1,7 +1,13 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import flask, json
 import app_handlers
-import functools
+import functools, os
 import random, string
+from authlib.integrations.flask_client import OAuth
+
+
 from typing import (
     Callable,
     Any
@@ -10,6 +16,17 @@ from typing import (
 app = flask.Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.secret_key = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
+
+oauth = OAuth(app)
+google = oauth.register(
+    name="google",
+    client_id=os.environ["GOOGLE_CLIENT_ID"],
+    client_secret=os.environ["GOOGLE_CLIENT_SECRET"],
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_kwargs={"scope": "openid email profile"},
+)
+
+ALLOWED_DOMAIN = "brandeis.edu"
 
 def is_loggedin(f:Callable) -> Callable:
     @functools.wraps(f)
@@ -104,6 +121,48 @@ def instructor_dashboard() -> str:
 def instructor_logout() -> str:
     flask.session.clear()
     return flask.redirect('/instructor/login')
+
+@app.route('/privacy', methods = ['GET'])
+def privacy() -> str:
+    return flask.render_template('privacy.html')
+
+@app.route('/terms-of-service', methods = ['GET'])
+def tos() -> str:
+    return flask.render_template('tos.html')
+
+@app.route("/login/google")
+def login_google():
+    redirect_uri = flask.url_for("auth_google_callback", _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/google/callback")
+def auth_google_callback():
+    token = google.authorize_access_token()
+    userinfo = token.get("userinfo")  # parsed ID token claims
+
+    if not userinfo:
+        return "Authentication failed.", 401
+
+    email = userinfo.get("email")
+    name = userinfo.get("name")
+    email_verified = userinfo.get("email_verified")
+    hosted_domain = userinfo.get("hd")  # only present for Google Workspace accounts
+
+    # Defense in depth: check both the hd claim AND the email suffix,
+    # rather than trusting either alone.
+    if not email_verified or hosted_domain != ALLOWED_DOMAIN or not email.endswith(f"@{ALLOWED_DOMAIN}"):
+        return "<h1>Login failed</h1>", 403
+
+    resp = app_handlers.Users.add_user_google_oauth(name, email)
+
+    flask.session.clear()
+    flask.session['user'] = resp['payload']
+    flask.session.permanent = True
+
+    return flask.redirect('/instructor/dashboard')
+
+
 
 '''
 @app.after_request
