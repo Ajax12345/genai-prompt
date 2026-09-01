@@ -4,7 +4,7 @@ $(function () {
   const $form = $("#disclosure-form");
   const $card = $form.closest(".card");
   const $emailInput = $("#student_email");
-  const $noAiCheckbox = $("#no_ai_used");
+  const $aiUsageRadios = $('input[name="ai_usage"]');
   const $logField = $("#log-field");
   const $logTextarea = $("#ai_log");
   const $submitBtn = $("#submit-btn");
@@ -33,15 +33,19 @@ $(function () {
      Toggle the log textarea based on the "no AI used" checkbox
      ------------------------------------------------------------------ */
   function syncLogFieldState() {
-    const noAiUsed = $noAiCheckbox.is(":checked");
-    $logField.toggleClass("is-collapsed", noAiUsed);
-    $logTextarea.prop("disabled", noAiUsed);
-    if (noAiUsed) {
+    const selected = $('input[name="ai_usage"]:checked').val();
+    const usedAi = selected === "yes";
+    $logField.toggleClass("is-collapsed", !usedAi);
+    $logTextarea.prop("disabled", !usedAi);
+    if (!usedAi) {
       clearFieldError("ai_log");
+    }
+    if (selected) {
+      clearFieldError("ai_usage");
     }
   }
 
-  $noAiCheckbox.on("change", syncLogFieldState);
+  $aiUsageRadios.on("change", syncLogFieldState);
 
   /* ------------------------------------------------------------------
      Validation
@@ -64,6 +68,7 @@ $(function () {
     let valid = true;
 
     clearFieldError("student_email");
+    clearFieldError("ai_usage");
     clearFieldError("ai_log");
 
     const email = $emailInput.val().trim();
@@ -75,10 +80,14 @@ $(function () {
       valid = false;
     }
 
-    if (!$noAiCheckbox.is(":checked") && !$logTextarea.val().trim()) {
+    const aiUsage = $('input[name="ai_usage"]:checked').val();
+    if (!aiUsage) {
+      setFieldError("ai_usage", "Select whether you used AI assistance for this assignment.");
+      valid = false;
+    } else if (aiUsage === "yes" && !$logTextarea.val().trim()) {
       setFieldError(
         "ai_log",
-        "Paste your conversation log, or check the box above if you didn't use AI."
+        "Paste your conversation log."
       );
       valid = false;
     }
@@ -117,10 +126,11 @@ $(function () {
       return;
     }
 
+    const aiUsage = $('input[name="ai_usage"]:checked').val();
     const payload = {
       student_email: $emailInput.val().trim(),
-      used_ai: !$noAiCheckbox.is(":checked"),
-      ai_log: $noAiCheckbox.is(":checked") ? null : $logTextarea.val().trim(),
+      used_ai: aiUsage === "yes",
+      ai_log: aiUsage === "yes" ? $logTextarea.val().trim() : null,
       assignment_id: $form.data("assignmentId") || null,
     };
 

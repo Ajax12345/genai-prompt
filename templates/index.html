@@ -48,13 +48,21 @@
       <fieldset class="field">
         <legend class="field__label">AI assistance</legend>
 
-        <label class="checkbox">
-          <input type="checkbox" id="no_ai_used" name="no_ai_used" />
-          <span class="checkbox__box" aria-hidden="true"></span>
-          <span class="checkbox__text">I did not use AI assistance for this assignment</span>
-        </label>
+        <div class="radio-group">
+          <label class="radio">
+            <input type="radio" name="ai_usage" id="ai_usage_yes" value="yes" />
+            <span class="radio__box" aria-hidden="true"></span>
+            <span class="radio__text">I used AI assistance for this assignment</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="ai_usage" id="ai_usage_no" value="no" />
+            <span class="radio__box" aria-hidden="true"></span>
+            <span class="radio__text">I did not use AI assistance for this assignment</span>
+          </label>
+        </div>
+        <p class="field__error" id="ai_usage-error"></p>
 
-        <div class="log-field" id="log-field">
+        <div class="log-field is-collapsed" id="log-field">
           <label class="field__label field__label--sub" for="ai_log">Paste your full conversation log</label>
           <p class="field__hint">
             Include your prompts and the model's responses, in the order they occurred.
@@ -65,6 +73,7 @@
             name="ai_log"
             rows="10"
             placeholder="Paste prompts and responses here..."
+            disabled
           ></textarea>
           <p class="field__error" id="ai_log-error"></p>
         </div>

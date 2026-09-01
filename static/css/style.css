@@ -294,7 +294,82 @@ fieldset.field {
 }
 
 /* ==========================================================================
-   Log field (collapses when "no AI used" is checked)
+   Radio group (AI usage: forces a choice between the two options)
+   ========================================================================== */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.radio {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfcfd;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.radio:hover {
+  border-color: var(--navy-700);
+}
+
+.radio input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio__box {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border: 1.5px solid var(--ink-400);
+  border-radius: 50%;
+  position: relative;
+  transition: border-color 0.15s ease;
+}
+
+.radio__box::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--navy-800);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.12s ease;
+}
+
+.radio input:checked ~ .radio__box {
+  border-color: var(--navy-800);
+}
+
+.radio input:checked ~ .radio__box::after {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.radio input:focus-visible ~ .radio__box {
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.18);
+}
+
+.radio__text {
+  font-size: 14.5px;
+  color: var(--ink-900);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Log field (collapses unless "I used AI assistance" is selected)
    ========================================================================== */
 .log-field {
   margin-top: 18px;
