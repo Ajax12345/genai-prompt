@@ -78,6 +78,22 @@
             disabled
           ></textarea>
           <p class="field__error" id="ai_log-error"></p>
+
+          <div class="file-upload">
+            <div class="file-upload__divider"><span>or</span></div>
+            <label class="field__label field__label--sub" for="ai_log_file">Upload a log file</label>
+            <p class="field__hint">Accepted formats: .md, .txt, .json</p>
+            <input
+              class="field__file"
+              type="file"
+              id="ai_log_file"
+              name="ai_log_file"
+              accept=".md,.txt,.json,text/markdown,text/plain,application/json"
+              disabled
+            />
+            <p class="file-upload__name" id="ai_log_file-name"></p>
+            <p class="field__error" id="ai_log_file-error"></p>
+          </div>
         </div>
       </fieldset>
 

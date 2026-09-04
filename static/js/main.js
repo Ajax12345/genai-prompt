@@ -7,8 +7,13 @@ $(function () {
   const $aiUsageRadios = $('input[name="ai_usage"]');
   const $logField = $("#log-field");
   const $logTextarea = $("#ai_log");
+  const $logFile = $("#ai_log_file");
+  const $logFileName = $("#ai_log_file-name");
   const $submitBtn = $("#submit-btn");
   const $statusEl = $("#status");
+
+  const ALLOWED_LOG_EXTENSIONS = ["md", "txt", "json"];
+  const MAX_LOG_FILE_BYTES = 2 * 1024 * 1024; // 2 MB
 
   const $contextBar = $("#context-bar");
   const $contextCourse = $("#context-course");
@@ -37,8 +42,12 @@ $(function () {
     const usedAi = selected === "yes";
     $logField.toggleClass("is-collapsed", !usedAi);
     $logTextarea.prop("disabled", !usedAi);
+    $logFile.prop("disabled", !usedAi);
     if (!usedAi) {
       clearFieldError("ai_log");
+      clearFieldError("ai_log_file");
+      $logFile.val("");
+      $logFileName.text("");
     }
     if (selected) {
       clearFieldError("ai_usage");
@@ -46,6 +55,59 @@ $(function () {
   }
 
   $aiUsageRadios.on("change", syncLogFieldState);
+
+  /* ------------------------------------------------------------------
+     File upload (alternative to pasting a log)
+     ------------------------------------------------------------------ */
+  function getExtension(filename) {
+    const parts = filename.split(".");
+    return parts.length > 1 ? parts.pop().toLowerCase() : "";
+  }
+
+  function handleLogFileChange() {
+    const fileInput = $logFile[0];
+    const file = fileInput.files && fileInput.files[0];
+
+    clearFieldError("ai_log_file");
+    clearFieldError("ai_log");
+
+    if (!file) {
+      $logFileName.text("");
+      return;
+    }
+
+    const ext = getExtension(file.name);
+    if (ALLOWED_LOG_EXTENSIONS.indexOf(ext) === -1) {
+      setFieldError(
+        "ai_log_file",
+        "Unsupported file type. Please upload a .md, .txt, or .json file."
+      );
+      fileInput.value = "";
+      $logFileName.text("");
+      return;
+    }
+
+    if (file.size > MAX_LOG_FILE_BYTES) {
+      setFieldError("ai_log_file", "File is too large (2 MB max).");
+      fileInput.value = "";
+      $logFileName.text("");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      $logTextarea.val(e.target.result);
+      $logFileName.text("Loaded: " + file.name);
+      clearFieldError("ai_log");
+    };
+    reader.onerror = function () {
+      setFieldError("ai_log_file", "Couldn't read that file. Please try again.");
+      $logFileName.text("");
+    };
+    reader.readAsText(file);
+  }
+
+  $logFile.on("change", handleLogFileChange);
 
   /* ------------------------------------------------------------------
      Validation

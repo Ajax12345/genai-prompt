@@ -55,7 +55,7 @@ body {
 }
 
 .ribbon__inner {
-  max-width: 640px;
+  max-width: 580px;
   margin: 0 auto;
 }
 
@@ -89,7 +89,7 @@ body {
    Layout
    ========================================================================== */
 .page {
-  max-width: 640px;
+  max-width: 580px;
   margin: 0 auto;
   /*padding: 0 24px 64px;*/
 }
@@ -98,7 +98,7 @@ body {
   background: var(--surface);
   border-radius: var(--radius);
   box-shadow: var(--shadow-card);
-  padding: 36px 36px 32px;
+  padding: 30px 30px 32px;
   margin-top: -48px;
   position: relative;
 }
@@ -384,6 +384,91 @@ fieldset.field {
   opacity: 0;
   margin-top: 0;
   pointer-events: none;
+}
+
+/* ==========================================================================
+   File upload (alternative to pasting a log)
+   ========================================================================== */
+.file-upload {
+  margin-top: 18px;
+}
+
+.file-upload__divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 4px 0 16px;
+}
+
+.file-upload__divider::before,
+.file-upload__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.file-upload__divider span {
+  padding: 0 10px;
+}
+
+.field__file {
+  display: block;
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--ink-900);
+  background: #fbfcfd;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.field__file:hover {
+  border-color: var(--navy-700);
+}
+
+.field__file:focus-visible {
+  outline: none;
+  border-color: var(--navy-700);
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.14);
+}
+
+.field__file:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.field__file::file-selector-button {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--navy-800);
+  background: var(--cyan-100);
+  border: none;
+  border-radius: 6px;
+  padding: 7px 12px;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.field__file::file-selector-button:hover {
+  background: #d3f0fa;
+}
+
+.file-upload__name {
+  font-size: 13px;
+  color: var(--ink-600);
+  margin: 8px 0 0;
+  min-height: 0;
 }
 
 /* ==========================================================================
