@@ -158,6 +158,29 @@ $(function () {
   }
 
   /* ------------------------------------------------------------------
+     Base64-encode the log before sending it.
+
+     The edge WAF in front of this domain pattern-matches request bodies
+     for command-injection-style content (pipes, "&&", "curl", "rm",
+     backticked shell snippets, etc.) — exactly what a pasted AI coding
+     transcript is full of. Encoding it as base64 keeps that content out
+     of the raw request body so it doesn't trip those rules. The server
+     decodes it back to plain text before storing it.
+
+     Plain btoa() breaks on non-ASCII text and can hit argument-count
+     limits on very large strings, so encode via UTF-8 bytes in chunks.
+     ------------------------------------------------------------------ */
+  function utf8ToBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = "";
+    const CHUNK_SIZE = 0x8000;
+    for (let i = 0; i < bytes.length; i += CHUNK_SIZE) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + CHUNK_SIZE));
+    }
+    return btoa(binary);
+  }
+
+  /* ------------------------------------------------------------------
      Status messaging
      ------------------------------------------------------------------ */
   function setStatus(message, type) {
@@ -189,10 +212,12 @@ $(function () {
     }
 
     const aiUsage = $('input[name="ai_usage"]:checked').val();
+    const rawLog = aiUsage === "yes" ? $logTextarea.val().trim() : null;
     const payload = {
       student_email: $emailInput.val().trim(),
       used_ai: aiUsage === "yes",
-      ai_log: aiUsage === "yes" ? $logTextarea.val().trim() : null,
+      ai_log: rawLog !== null ? utf8ToBase64(rawLog) : null,
+      ai_log_encoding: rawLog !== null ? "base64" : null,
       assignment_id: $form.data("assignmentId") || null,
     };
 

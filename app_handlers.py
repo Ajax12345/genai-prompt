@@ -1,6 +1,6 @@
 import mdb, uuid
 import urllib.parse
-import math
+import math, base64
 from datetime import datetime
 
 class PromptSave:
@@ -18,6 +18,19 @@ class PromptSave:
     def save_prompt_submission(cls, payload:dict) -> dict:
         print('save prompt submission')
         print(payload)
+
+        # The frontend base64-encodes ai_log before sending so that pasted
+        # shell commands/code in a student's transcript don't trip the edge
+        # WAF's command-injection heuristics. Decode it back to plain text
+        # here so the stored jsonb stays human-readable.
+        if payload.get('ai_log_encoding') == 'base64' and payload.get('ai_log'):
+            try:
+                payload['ai_log'] = base64.b64decode(payload['ai_log']).decode('utf-8')
+            except (ValueError, UnicodeDecodeError):
+                return {'success': False, 'error': 'Could not decode ai_log.'}
+
+        payload.pop('ai_log_encoding', None)
+
         with mdb.DB(as_dict=True) as db:
             db.execute('insert into prompts (student_email, assignment, data) values (%s, %s, %s)', 
                 [

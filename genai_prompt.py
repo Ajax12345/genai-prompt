@@ -61,7 +61,7 @@ def api_prompts() -> dict:
         flask.request.get_json()
     )
 
-    return flask.jsonify(resp)
+    return flask.jsonify(resp), (200 if resp.get('success') else 400)
 
 @app.route('/instructor/login', methods = ['GET'])
 def instructor_login() -> str:
