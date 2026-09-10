@@ -146,6 +146,44 @@ $(function () {
   });
 
   /* ------------------------------------------------------------------
+     View log modal — fetch a submission's ai_log on demand and show it
+     ------------------------------------------------------------------ */
+  const $logModalOverlay = $("#log-modal-overlay");
+  const $logModalBody = $("#log-modal-body");
+
+  $(document).on("click", "[data-view-log]", function () {
+    const $btn = $(this);
+    const $label = $btn.find(".view-log-btn__label");
+    const submissionId = $btn.data("submission-id");
+
+    if ($btn.hasClass("is-loading")) return;
+
+    const originalLabel = $label.text();
+    $btn.addClass("is-loading").prop("disabled", true);
+
+    $.ajax({
+      url: "/api/instructor/prompt/" + encodeURIComponent(submissionId),
+      method: "GET",
+    })
+      .done(function (data) {
+        // .text(), not .html() — a pasted AI transcript can contain
+        // arbitrary characters (including things that look like markup),
+        // and it must never be interpreted as HTML.
+        $logModalBody.text(data.ai_log || "");
+        openModal($logModalOverlay);
+        $logModalOverlay.find(".modal__close-x").trigger("focus");
+      })
+      .fail(function (xhr) {
+        const message = xhr?.responseJSON?.error || "Couldn't load the log.";
+        $label.text(message);
+        setTimeout(() => $label.text(originalLabel), 2500);
+      })
+      .always(function () {
+        $btn.removeClass("is-loading").prop("disabled", false);
+      });
+  });
+
+  /* ------------------------------------------------------------------
      Copy submission link
      ------------------------------------------------------------------ */
   $("#copy-link-btn").on("click", function () {

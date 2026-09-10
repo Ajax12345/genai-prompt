@@ -175,7 +175,18 @@
               <td class="submissions-table__email">{{submission.email}}</td>
               <td>{{submission.timestamp}}</td>
               {%if submission.used_ai%}
-              <td><span class="ai-pill ai-pill--yes">Yes</span></td>
+              <td>
+                <span class="ai-pill ai-pill--yes">Yes</span>
+                <button
+                  class="view-log-btn"
+                  type="button"
+                  data-view-log
+                  data-submission-id="{{submission.submission_id}}"
+                >
+                  <span class="view-log-btn__label">View log</span>
+                  <span class="view-log-btn__spinner" aria-hidden="true"></span>
+                </button>
+              </td>
               {%else%}
               <td><span class="ai-pill ai-pill--no">No</span></td>
               {%endif%}
@@ -269,6 +280,20 @@
           <button class="btn-primary" type="submit" id="create-assignment-btn">Create assignment</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ===================== View log modal ===================== -->
+  <div class="modal-overlay" id="log-modal-overlay" hidden>
+    <div class="modal modal--log" role="dialog" aria-modal="true" aria-labelledby="log-modal-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="log-modal-title">AI conversation log</h2>
+        <button class="modal__close-x" type="button" data-close-modal="log-modal-overlay" aria-label="Close">&times;</button>
+      </div>
+      <pre class="log-modal__body" id="log-modal-body"></pre>
+      <div class="modal__actions">
+        <button class="btn-secondary" type="button" data-close-modal="log-modal-overlay">Close</button>
+      </div>
     </div>
   </div>
 

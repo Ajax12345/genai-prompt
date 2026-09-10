@@ -44,6 +44,27 @@ class PromptSave:
         return {'success': True}
 
     @classmethod
+    def get_log(cls, user_id:str, submission_id:str) -> dict:
+        with mdb.DB(as_dict=True) as db:
+            db.execute('''
+                select p.data ->> 'ai_log' as ai_log
+                from prompts p
+                join assignments a on a.id = p.assignment
+                join courses c on c.id = a.course
+                where p.id = %s and c.user_id = %s
+            ''', [submission_id, user_id])
+
+            result = db.fetchone()
+
+        if result is None:
+            return {'success': False, 'error': 'Submission not found.'}
+
+        if not result['ai_log']:
+            return {'success': False, 'error': 'No AI log was submitted for this student.'}
+
+        return {'success': True, 'ai_log': result['ai_log']}
+
+    @classmethod
     def meta(cls, assignment_id:str) -> dict:
         with mdb.DB(as_dict=True) as db:
             db.execute('''
@@ -198,7 +219,8 @@ class Courses:
                                 'submissions', (
                                     select jsonb_agg(
                                         p.data || jsonb_build_object(
-                                            'added', p.added
+                                            'added', p.added,
+                                            'submission_id', p.id
                                         )
                                     ) 
                                     from prompts p
@@ -263,6 +285,7 @@ class Courses:
                     'email': submission['student_email'],
                     'timestamp': dt.strftime('%b %-d, %Y \u00b7 %-I:%M %p'),
                     'used_ai': submission['used_ai'],
+                    'submission_id': submission['submission_id'],
                 })
 
             chosen_assignment['is_ai'] = is_ai

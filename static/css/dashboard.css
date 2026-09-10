@@ -1025,6 +1025,55 @@ fieldset.field {
   color: var(--ink-600);
 }
 
+.view-log-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 10px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--navy-700);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.view-log-btn:hover {
+  border-color: var(--navy-700);
+  background: var(--cyan-100);
+}
+
+.view-log-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.view-log-btn__spinner {
+  display: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border);
+  border-top-color: var(--navy-700);
+  border-radius: 50%;
+  animation: view-log-spin 0.6s linear infinite;
+}
+
+.view-log-btn.is-loading .view-log-btn__label {
+  display: none;
+}
+
+.view-log-btn.is-loading .view-log-btn__spinner {
+  display: inline-block;
+}
+
+@keyframes view-log-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ==========================================================================
    Dashboard: modals
    ========================================================================== */
@@ -1073,6 +1122,64 @@ fieldset.field {
   margin-top: 6px;
 }
 
+.modal--log {
+  max-width: 840px;
+}
+
+.modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.modal__header .modal__title {
+  margin: 0;
+}
+
+.modal__close-x {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 1;
+  color: var(--ink-400);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal__close-x:hover {
+  background: var(--page-bg);
+  color: var(--ink-900);
+}
+
+.modal__close-x:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.18);
+}
+
+.log-modal__body {
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 14px 0 0;
+  padding: 14px;
+  background: var(--page-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-900);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* ==========================================================================
    Responsive
    ========================================================================== */
@@ -1114,5 +1221,8 @@ fieldset.field {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+  .view-log-btn__spinner {
+    animation: none;
   }
 }

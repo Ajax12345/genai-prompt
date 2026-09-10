@@ -15,7 +15,7 @@ from typing import (
 
 app = flask.Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-app.secret_key = ''.join(random.choice(string.ascii_letters+string.digits) for _ in range(20))
+app.secret_key = 'lsR409xXfc2Fuj9OnZ1c'
 
 oauth = OAuth(app)
 google = oauth.register(
@@ -100,6 +100,15 @@ def api_instructor_new_assignment() -> tuple:
         flask.request.get_json()
     )
     return flask.jsonify(resp)
+
+@app.route('/api/instructor/prompt/<submission_id>', methods = ['GET'])
+@is_loggedin
+def api_instructor_prompt(submission_id:str) -> tuple:
+    resp = app_handlers.PromptSave.get_log(
+        flask.session['user']['id'],
+        submission_id
+    )
+    return flask.jsonify(resp), (200 if resp.get('success') else 404)
 
 @app.route('/instructor/dashboard', methods = ['GET'])
 @is_loggedin
