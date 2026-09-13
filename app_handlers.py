@@ -284,6 +284,7 @@ class Courses:
                 submissions.append({
                     'email': submission['student_email'],
                     'timestamp': dt.strftime('%b %-d, %Y \u00b7 %-I:%M %p'),
+                    'timestamp_sort': submission['added'],
                     'used_ai': submission['used_ai'],
                     'submission_id': submission['submission_id'],
                 })

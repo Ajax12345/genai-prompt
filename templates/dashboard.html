@@ -161,17 +161,17 @@
 
         {%if side_bar_data.assignment.submissions %}
         <h3 class="field__label field__label--sub">Students who have submitted</h3>
-        <table class="submissions-table">
+        <table class="submissions-table" id="submissions-table">
           <thead>
             <tr>
-              <th>Student</th>
-              <th>Submitted</th>
+              <th class="submissions-table__sortable" data-sort-key="email">Student<span class="sort-indicator"></span></th>
+              <th class="submissions-table__sortable" data-sort-key="timestamp">Submitted<span class="sort-indicator"></span></th>
               <th>Used AI</th>
             </tr>
           </thead>
           <tbody>
             {% for submission in side_bar_data.assignment.submissions%}
-            <tr>
+            <tr data-email="{{submission.email}}" data-timestamp="{{submission.timestamp_sort}}">
               <td class="submissions-table__email">{{submission.email}}</td>
               <td>{{submission.timestamp}}</td>
               {%if submission.used_ai%}

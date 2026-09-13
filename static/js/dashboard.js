@@ -184,6 +184,35 @@ $(function () {
   });
 
   /* ------------------------------------------------------------------
+     Sortable submissions table (by student email or submitted timestamp)
+     ------------------------------------------------------------------ */
+  const $submissionsTable = $("#submissions-table");
+
+  $submissionsTable.on("click", ".submissions-table__sortable", function () {
+    const $th = $(this);
+    const sortKey = $th.data("sort-key");
+    const direction = $th.attr("data-sort-dir") === "asc" ? "desc" : "asc";
+
+    $th.siblings(".submissions-table__sortable").removeAttr("data-sort-dir");
+    $th.attr("data-sort-dir", direction);
+
+    const $tbody = $submissionsTable.find("tbody");
+    const $rows = $tbody.find("tr").get();
+
+    $rows.sort(function (rowA, rowB) {
+      const a = ($(rowA).data(sortKey) ?? "").toString().toLowerCase();
+      const b = ($(rowB).data(sortKey) ?? "").toString().toLowerCase();
+      if (a < b) return direction === "asc" ? -1 : 1;
+      if (a > b) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    $.each($rows, function (_, row) {
+      $tbody.append(row);
+    });
+  });
+
+  /* ------------------------------------------------------------------
      Copy submission link
      ------------------------------------------------------------------ */
   $("#copy-link-btn").on("click", function () {
