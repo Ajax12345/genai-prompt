@@ -146,6 +146,53 @@ $(function () {
   });
 
   /* ------------------------------------------------------------------
+     Edit assignment — pencil button opens the rename modal prefilled
+     with the current name; on save, update the title and the matching
+     sidebar entry in place (no full page reload).
+     ------------------------------------------------------------------ */
+  const $editAssignmentForm = $("#edit-assignment-form");
+  const $saveAssignmentBtn = $("#save-assignment-btn");
+  const $assignmentTitle = $("#assignment-title");
+
+  $("#edit-assignment-btn").on("click", function () {
+    const assignmentId = $(this).data("assignment-id");
+
+    $editAssignmentForm.data("assignmentId", assignmentId);
+    $("#edit-assignment-name").val($assignmentTitle.text().trim());
+
+    openModal($("#edit-assignment-overlay"));
+  });
+
+  $editAssignmentForm.on("submit", function (event) {
+    event.preventDefault();
+
+    const assignmentId = $editAssignmentForm.data("assignmentId");
+    const name = $("#edit-assignment-name").val().trim();
+    const payload = { assignment_id: assignmentId, name: name };
+
+    setLoading($saveAssignmentBtn, true, "Saving...", "Save");
+    setStatus($editAssignmentForm, "", null);
+
+    $.ajax({
+      url: "/api/instructor/update-assignment",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify(payload),
+    })
+      .done(function () {
+        $assignmentTitle.text(name);
+        $(`.entity-item[data-assignment-id="${assignmentId}"] .entity-item__name`).text(name);
+        setLoading($saveAssignmentBtn, false, "Saving...", "Save");
+        closeModal($("#edit-assignment-overlay"));
+      })
+      .fail(function (xhr) {
+        const message = xhr?.responseJSON?.error || "Couldn't rename the assignment. Please try again.";
+        setStatus($editAssignmentForm, message, "error");
+        setLoading($saveAssignmentBtn, false, "Saving...", "Save");
+      });
+  });
+
+  /* ------------------------------------------------------------------
      View log modal — fetch a submission's ai_log on demand and show it
      ------------------------------------------------------------------ */
   const $logModalOverlay = $("#log-modal-overlay");

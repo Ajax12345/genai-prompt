@@ -330,6 +330,30 @@ class Assignments:
             'assignment_id': assignment_id
         }
 
+    @classmethod
+    def update_assignment(cls, user_id:str, assignment_id:str, name:str) -> dict:
+        '''
+        Rename an assignment, scoped to the instructor who owns its course -
+        same guard as PromptSave.get_log, so one instructor can't rewrite
+        another's assignment by guessing/passing a uuid.
+        '''
+        with mdb.DB(as_dict=True) as db:
+            db.execute('''
+                update assignments a
+                set data = jsonb_set(a.data, '{name}', to_jsonb(%s::text))
+                from courses c
+                where a.id = %s and a.course = c.id and c.user_id = %s
+                returning a.id
+            ''', [name, assignment_id, user_id])
+
+            result = db.fetchone()
+            db.commit()
+
+        if result is None:
+            return {'success': False, 'error': 'Assignment not found.'}
+
+        return {'success': True}
+
 if __name__ == '__main__':
     '''
     Users.add_user(

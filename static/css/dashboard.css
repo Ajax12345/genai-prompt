@@ -578,6 +578,47 @@ fieldset.field {
   white-space: nowrap;
 }
 
+.col__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col__title-row .col__title {
+  min-width: 0;
+}
+
+.edit-assignment-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: var(--ink-400);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.edit-assignment-btn:hover {
+  color: var(--navy-700);
+  background: var(--cyan-100);
+}
+
+.edit-assignment-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 52, 120, 0.18);
+}
+
+.edit-assignment-btn__icon {
+  width: 14px;
+  height: 14px;
+}
+
 .col__subtitle {
   display: block;
   font-size: 12.5px;

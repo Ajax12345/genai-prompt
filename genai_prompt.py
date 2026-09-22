@@ -101,6 +101,17 @@ def api_instructor_new_assignment() -> tuple:
     )
     return flask.jsonify(resp)
 
+@app.route('/api/instructor/update-assignment', methods = ['POST'])
+@is_loggedin
+def api_instructor_update_assignment() -> tuple:
+    payload = flask.request.get_json()
+    resp = app_handlers.Assignments.update_assignment(
+        flask.session['user']['id'],
+        payload['assignment_id'],
+        payload['name']
+    )
+    return flask.jsonify(resp), 200 if resp.get('success') else 400
+
 @app.route('/api/instructor/prompt/<submission_id>', methods = ['GET'])
 @is_loggedin
 def api_instructor_prompt(submission_id:str) -> tuple:

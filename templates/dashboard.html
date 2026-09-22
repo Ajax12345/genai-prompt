@@ -49,7 +49,7 @@
           <ul class="entity-list entity-list--nested">
             {% for assignment in course.assignments %}
             <li>
-              <a class="entity-item {{assignment.is_active}}" href="/instructor/dashboard?course={{course.course_id}}&assignment={{assignment.assignment_id}}">
+              <a class="entity-item {{assignment.is_active}}" href="/instructor/dashboard?course={{course.course_id}}&assignment={{assignment.assignment_id}}" data-assignment-id="{{assignment.assignment_id}}">
                 <span class="entity-item__name">{{assignment.name}}</span>
                 <span class="entity-item__meta">{{assignment.submitted_text}}</span>
               </a>
@@ -84,7 +84,21 @@
         {% if side_bar_data.has_selected_assignment%}
       <div class="col__header">
         <div>
-          <h2 class="col__title">{{side_bar_data.assignment.name}}</h2>
+          <div class="col__title-row">
+            <h2 class="col__title" id="assignment-title">{{side_bar_data.assignment.name}}</h2>
+            <button
+              class="edit-assignment-btn"
+              type="button"
+              id="edit-assignment-btn"
+              data-assignment-id="{{side_bar_data.assignment.assignment_id}}"
+              aria-label="Rename assignment"
+              title="Rename assignment"
+            >
+              <svg class="edit-assignment-btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+              </svg>
+            </button>
+          </div>
           <span class="col__subtitle">{{side_bar_data.course.name}} &middot; {{side_bar_data.course.code}}</span>
         </div>
       </div>
@@ -278,6 +292,32 @@
         <div class="modal__actions">
           <button class="btn-secondary" type="button" data-close-modal="new-assignment-overlay">Cancel</button>
           <button class="btn-primary" type="submit" id="create-assignment-btn">Create assignment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== Edit assignment modal ===================== -->
+  <div class="modal-overlay" id="edit-assignment-overlay" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-assignment-title">
+      <h2 class="modal__title" id="edit-assignment-title">Rename assignment</h2>
+      <form id="edit-assignment-form" method="post">
+        <div class="field">
+          <label class="field__label" for="edit-assignment-name">Assignment name</label>
+          <input
+            class="field__input"
+            type="text"
+            id="edit-assignment-name"
+            name="name"
+            placeholder="e.g. Homework 3"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <p class="status" id="edit-assignment-status" role="status" aria-live="polite"></p>
+        <div class="modal__actions">
+          <button class="btn-secondary" type="button" data-close-modal="edit-assignment-overlay">Cancel</button>
+          <button class="btn-primary" type="submit" id="save-assignment-btn">Save</button>
         </div>
       </form>
     </div>
