@@ -46,11 +46,23 @@ $(function () {
     closeModal($("#" + $(this).data("close-modal")));
   });
 
-  // Close on overlay click (outside the modal box).
+  // Close on overlay click (outside the modal box) — but only when the
+  // mousedown that started this click also landed on the overlay itself.
+  // Otherwise, dragging a text selection (e.g. in an input) and releasing
+  // the mouse a pixel or two outside the field reports the overlay as the
+  // click's target even though the interaction began inside the modal,
+  // and the modal would close out from under an in-progress selection.
+  let overlayMouseDownTarget = null;
+
+  $(".modal-overlay").on("mousedown", function (event) {
+    overlayMouseDownTarget = event.target;
+  });
+
   $(".modal-overlay").on("click", function (event) {
-    if (event.target === this) {
+    if (event.target === this && overlayMouseDownTarget === this) {
       closeModal($(this));
     }
+    overlayMouseDownTarget = null;
   });
 
   // Close on Escape.
